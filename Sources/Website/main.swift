@@ -49,11 +49,9 @@ try await saga
     ]
   )
 
-  // Landing page
   .createPage("index.html", using: swim(renderHomePage))
-
-  // 404 page
   .createPage("404.html", using: swim(render404Page))
+  .createPage("search/index.html", using: swim(renderSearch))
 
   // Minify all HTML output (prod only)
   .postProcess { html, _ in
@@ -63,3 +61,14 @@ try await saga
 
   // Run everything!
   .run()
+
+// Index the site with Pagefind
+let pagefind = Process()
+pagefind.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+pagefind.arguments = ["pnpm", "pagefind", "--site", "deploy"]
+pagefind.currentDirectoryURL = URL(fileURLWithPath: saga.rootPath.string)
+try pagefind.run()
+pagefind.waitUntilExit()
+if pagefind.terminationStatus != 0 {
+  print("pagefind failed with exit code \(pagefind.terminationStatus)")
+}

@@ -7,12 +7,20 @@ FROM swift:6.0-noble AS builder
 RUN apt-get update && apt-get --no-install-recommends install -y \
     just \
     curl \
+    nodejs npm \
     && apt-get install -y libjavascriptcoregtk-4.1-dev \
     && rm -rf /var/lib/apt/lists/* \
     && pkg-config --libs javascriptcoregtk-4.1
 
+# Install pnpm
+RUN npm install -g pnpm
+
 # Set working directory
 WORKDIR /app
+
+# Install Node dependencies
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy Swift package files for dependency resolution
 COPY Package.swift Package.resolved justfile ./

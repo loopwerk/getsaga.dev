@@ -88,7 +88,8 @@ body .background {
   @apply border-b-0;
 }
 
-.doc-content pre.member-declaration {
+.doc-content pre.member-declaration,
+.doc-content pre.member-declaration code {
   @apply bg-transparent border-0 rounded-none p-0 m-0 overflow-x-auto whitespace-pre-wrap break-words;
 }
 
@@ -178,6 +179,60 @@ pre:has(> code[class*="language-shell-session"])::after {
 
 .doc-content blockquote p:last-child {
   @apply mb-0;
+}
+
+/* Search */
+.search-icon {
+  @apply absolute top-1/2 -translate-y-1/2 left-4 text-zinc-500 pointer-events-none;
+}
+
+.search-icon svg {
+  @apply h-5 w-5;
+}
+
+.search-input {
+  @apply w-full rounded-xl border border-zinc-800 bg-zinc-800 py-3 pr-4 pl-12 text-base text-zinc-200 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-600;
+}
+
+.search-result {
+  @apply block border-2 border-transparent px-4 py-6 -mx-4 no-underline transition-colors last:border-b-0 rounded-lg;
+}
+
+.search-result:hover {
+  @apply border-l-accent border-r-accent bg-zinc-800;
+}
+
+.search-result-header {
+  @apply mb-1;
+}
+
+.search-result-kind {
+  @apply text-xs font-semibold uppercase tracking-wide text-zinc-500 mr-2;
+}
+
+.search-result-title {
+  @apply text-lg font-bold text-zinc-200;
+}
+
+.search-result-declaration,
+.search-result-declaration code {
+  @apply p-3 bg-zinc-900! border-zinc-800 rounded-lg mb-2 mt-2 whitespace-pre-wrap! break-words;
+}
+
+.search-result-declaration {
+  @apply border border-zinc-800;
+}
+
+.search-result-declaration code {
+  @apply font-mono text-sm leading-relaxed border-0 p-0 m-0;
+}
+
+.search-result-excerpt {
+  @apply text-sm text-zinc-400 leading-relaxed mt-2 mb-0 break-words;
+}
+
+.search-result-excerpt mark {
+  @apply bg-transparent text-accent font-semibold;
 }
 
 /* Table of contents */

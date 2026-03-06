@@ -25,7 +25,8 @@ func renderDocPage(context: ItemRenderingContext<DocMetadata>) -> Node {
   return layout(title: "Documentation - \(context.item.title)", activePage: .docs) {
     div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] \(hasToc ? "lg:grid-cols-[220px_1fr_180px]" : "") gap-12") {
       docSidebar(docs: context.items, currentUrl: context.item.url)
-      main(class: "doc-content min-w-0") {
+      main(class: "doc-content min-w-0", customAttributes: ["data-pagefind-body": ""]) {
+        Node.raw(#"<span data-pagefind-meta="kind" style="display:none">Topic</span>"#)
         h1 { context.item.title }
         Node.raw(context.item.body)
       }

@@ -124,9 +124,19 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
         }
         if paramLine.hasPrefix("- "), let colonIndex = paramLine.dropFirst(2).firstIndex(of: ":") {
           let name = String(paramLine[paramLine.index(paramLine.startIndex, offsetBy: 2) ..< colonIndex])
-          let desc = String(paramLine[paramLine.index(after: colonIndex)...]).trimmingCharacters(in: .whitespaces)
-          params.append((name, desc))
+          var desc = String(paramLine[paramLine.index(after: colonIndex)...]).trimmingCharacters(in: .whitespaces)
           i += 1
+          // Collect continuation lines (indented, not a new parameter or Returns)
+          while i < lines.count {
+            let nextLine = lines[i]
+            let nextTrimmed = nextLine.trimmingCharacters(in: .whitespaces)
+            if nextTrimmed.isEmpty || nextTrimmed.hasPrefix("- ") {
+              break
+            }
+            desc += "  \n" + nextTrimmed
+            i += 1
+          }
+          params.append((name, desc))
         } else {
           break
         }

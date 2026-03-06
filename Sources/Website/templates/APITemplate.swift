@@ -65,8 +65,8 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
     div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
       apiSidebar(currentSlug: context.item.url, allItems: context.allItems)
 
-      main(class: "doc-content min-w-0") {
-        p(class: "text-sm text-zinc-500 uppercase tracking-wide font-semibold mb-1") { meta.kind.displayName }
+      main(class: "doc-content min-w-0", customAttributes: ["data-pagefind-body": ""]) {
+        p(class: "text-sm text-zinc-500 uppercase tracking-wide font-semibold mb-1", customAttributes: ["data-pagefind-meta": "kind", "data-pagefind-ignore": ""]) { meta.kind.displayName }
 
         h1 {
           Node.raw(breakableTitle(context.item.title))
@@ -84,8 +84,8 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
           }
         }
 
-        div(class: "mb-6") {
-          Node.raw(#"<pre class="top-declaration"><code class="language-swift">\#(meta.declaration)</code></pre>"#)
+        div(class: "mb-6", customAttributes: ["data-pagefind-ignore": ""]) {
+          Node.raw(#"<pre class="top-declaration"><code class="language-swift" data-pagefind-meta="declaration">\#(meta.declaration)</code></pre>"#)
         }
 
         if !context.item.body.isEmpty {
@@ -126,7 +126,7 @@ func renderMemberGroups(_ members: [APIMember]) -> Node {
         let anchor = member.name.lowercased()
         nodes.append(
           div(class: "member-item member-\(kind.rawValue)", id: anchor) {
-            Node.raw(#"<pre class="member-declaration\#(member.isDeprecated ? " line-through" : "")"><code class="language-swift">\#(member.declaration)</code></pre>"#)
+            Node.raw(#"<pre class="member-declaration\#(member.isDeprecated ? " line-through" : "")" data-pagefind-ignore><code class="language-swift">\#(member.declaration)</code></pre>"#)
             if member.isDeprecated {
               if let message = member.deprecationMessage {
                 blockquote(class: "mt-4") {

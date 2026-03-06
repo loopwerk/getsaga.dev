@@ -1,6 +1,8 @@
 import HTML
 import Saga
 
+let searchSVG = #"<svg class="h-5 w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" style="stroke-linecap:round;stroke-linejoin:round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>"#
+
 let githubSVG = #"<svg class="h-5 w-5 fill-current" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>"#
 
 enum Page {
@@ -36,31 +38,36 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl") {
           nav(class: "mx-auto flex h-full max-w-5xl items-center justify-between px-8") {
             a(class: "flex items-center", href: "/") {
-              img(alt: "Saga", class: "h-6 w-auto", src: "/static/saga_word.svg")
+              img(alt: "Saga", class: "h-4 md:h-6 w-auto mt-1.5", src: "/static/saga_word.svg")
             }
-            ul(class: "flex list-none items-center gap-5 md:gap-8") {
+            ul(class: "flex list-none items-center gap-4 md:gap-8") {
               li {
                 a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .docs ? " text-zinc-200" : "")", href: "/docs/") {
-                  span(class: "hidden md:block") {
+                  span(class: "hidden md:inline") {
                     "Documentation"
                   }
-                  span(class: "block md:hidden") {
+                  span(class: "inline md:hidden") {
                     "Docs"
                   }
                 }
               }
               li {
                 a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .api ? " text-zinc-200" : "")", href: "/api/") {
-                  span(class: "hidden md:block") {
+                  span(class: "hidden md:inline") {
                     "API reference"
                   }
-                  span(class: "block md:hidden") {
+                  span(class: "inline md:hidden") {
                     "API"
                   }
                 }
               }
               li {
                 a(class: "text-sm transition-colors hover:text-zinc-200", href: "https://www.loopwerk.io/open-source/support/", target: "_blank") { "Support" }
+              }
+              li {
+                a(class: "flex items-center transition-colors hover:text-zinc-200", href: "/search/", customAttributes: ["aria-label": "Search"]) {
+                  Node.raw(searchSVG)
+                }
               }
               li {
                 a(class: "flex items-center transition-colors hover:text-zinc-200", href: "https://github.com/loopwerk/Saga", target: "_blank", customAttributes: ["aria-label": "GitHub"]) {
@@ -103,6 +110,107 @@ func render404Page(context: PageRenderingContext) -> Node {
       a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/") {
         "Back to home"
       }
+    }
+  }
+}
+
+func renderSearch(context: PageRenderingContext) -> Node {
+  layout(title: "Search", activePage: .other) {
+    script(src: hashed("/static/prism.js"))
+    script {
+      Node.raw(
+        """
+        async function initSearch() {
+          const pagefind = await import("/pagefind/pagefind.js");
+          await pagefind.init();
+
+          const input = document.getElementById("search");
+          const summary = document.getElementById("summary");
+          const results = document.getElementById("results");
+          let debounce = null;
+
+          async function doSearch(query) {
+            if (!query) {
+              summary.textContent = "";
+              results.innerHTML = "";
+              return;
+            }
+            const search = await pagefind.search(query);
+            summary.textContent = search.results.length + " result" + (search.results.length !== 1 ? "s" : "") + " for \\u201c" + query + "\\u201d";
+
+            results.innerHTML = "";
+            const loaded = await Promise.all(search.results.slice(0, 20).map(r => r.data()));
+            loaded.sort((a, b) => (a.meta.kind === "Topic" ? 0 : 1) - (b.meta.kind === "Topic" ? 0 : 1));
+            for (const result of loaded) {
+              const item = document.createElement("a");
+              item.href = result.url;
+              item.className = "search-result";
+
+              const kind = result.meta.kind;
+              const declaration = result.meta.declaration;
+
+              let header = '<span class="search-result-title">' + result.meta.title + '</span>';
+              if (kind) {
+                header = '<span class="search-result-kind">' + kind + '</span>' + header;
+              }
+              item.innerHTML = '<div class="search-result-header">' + header + '</div>';
+
+              if (declaration) {
+                const pre = document.createElement("pre");
+                pre.className = "search-result-declaration";
+                const code = document.createElement("code");
+                code.className = "language-swift";
+                code.textContent = declaration;
+                pre.appendChild(code);
+                item.appendChild(pre);
+                if (typeof Prism !== "undefined") {
+                  Prism.highlightElement(code);
+                }
+              }
+
+              if (result.excerpt) {
+                const excerpt = document.createElement("p");
+                excerpt.className = "search-result-excerpt";
+                excerpt.innerHTML = result.excerpt;
+                item.appendChild(excerpt);
+              }
+
+              results.appendChild(item);
+            }
+          }
+
+          input.addEventListener("input", () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(() => {
+              const q = input.value;
+              const url = new URL(window.location);
+              url.searchParams.set("q", q);
+              history.replaceState(null, "", url);
+              doSearch(q);
+            }, 200);
+          });
+
+          const q = new URLSearchParams(window.location.search).get("q");
+          if (q) {
+            input.value = q;
+            doSearch(q);
+          }
+
+          input.focus();
+        }
+        initSearch();
+        """
+      )
+    }
+
+    section(class: "mx-auto max-w-5xl px-8 pt-24 pb-24") {
+      form(action: "/search/", class: "relative mb-8", id: "search-form") {
+        Node.raw(#"<div class="search-icon">\#(searchSVG)</div>"#)
+        input(class: "search-input", id: "search", name: "q", placeholder: "Search documentation...", type: "text", customAttributes: ["autocomplete": "off"])
+      }
+
+      p(class: "text-sm text-zinc-500 mb-8", id: "summary")
+      div(id: "results")
     }
   }
 }

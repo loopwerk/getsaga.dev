@@ -5,3 +5,4 @@ content/docs
 .swiftpm
 .claude
 .playwright-mcp
+node_modules
