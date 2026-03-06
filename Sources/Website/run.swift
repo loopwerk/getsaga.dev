@@ -29,7 +29,12 @@ struct Run {
         folder: "docs",
         metadata: DocMetadata.self,
         readers: [.parsleyMarkdownReader],
-        itemProcessor: sequence(processDocItem, syntaxHighlight, boldBlockquoteKeywords, swiftSoupProcessor(addHeadingAnchors, processExternalLinks, renderToc)),
+        itemProcessor: sequence(
+          processDocItem,
+          syntaxHighlight,
+          boldBlockquoteKeywords,
+          swiftSoupProcessor(addHeadingAnchors, processExternalLinks, renderToc)
+        ),
         sorting: docSorting,
         writers: [
           .itemWriter(swim(renderDocPage)),
