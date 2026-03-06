@@ -159,7 +159,7 @@ func apiSidebar(currentSlug: String, allItems: [AnyItem]) -> Node {
   let apiItems = allItems.compactMap { $0 as? Item<APIMetadata> }
   let grouped = Dictionary(grouping: apiItems) { $0.metadata.kind }
 
-  return aside(class: "md:sticky md:top-20 md:self-start md:pt-2") {
+  return aside(class: "doc-sidebar") {
     SymbolKind.allCases.filter(\.isTopLevel).compactMap { kind -> [Node]? in
       guard let items = grouped[kind], !items.isEmpty else { return nil }
       let sorted = items.sorted { $0.title < $1.title }

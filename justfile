@@ -8,7 +8,7 @@ resolve:
 
 # Compile without running
 compile:
-  swift build --product Website -j 1
+  swift build --product Website -j 2
 
 # Full build
 build: clean copy-docs symbol-graph

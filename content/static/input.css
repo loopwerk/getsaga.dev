@@ -51,6 +51,10 @@ body .background {
   @apply text-accent transition-colors hover:text-accent-hover;
 }
 
+.doc-sidebar {
+  @apply md:sticky md:top-20 md:self-start md:pt-2 md:max-h-[calc(100vh-5rem)] md:overflow-y-auto;
+}
+
 .sidebar-link {
   @apply block text-sm text-zinc-400 px-3 py-1.5 rounded-md no-underline overflow-hidden text-ellipsis whitespace-nowrap transition-colors;
 }
