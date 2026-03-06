@@ -64,25 +64,17 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         }
 
         // Terminal
-        div(class: "overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900") {
-          div(class: "flex items-center gap-2 border-b border-zinc-800 px-5 py-3") {
-            span(class: "h-2.5 w-2.5 rounded-full bg-[#ff5f57]") {}
-            span(class: "h-2.5 w-2.5 rounded-full bg-[#febc2e]") {}
-            span(class: "h-2.5 w-2.5 rounded-full bg-[#28c840]") {}
-            span(class: "ml-2 font-mono text-xs text-zinc-500") { "Terminal" }
-          }
-          Node.raw(Moon.shared.highlightCodeBlocks(in: """
-          <pre><code class="language-shell">$ saga init mysite
-          $ cd mysite
-          $ saga dev</code></pre>
-          """))
-        }
+        Node.raw(Moon.shared.highlightCodeBlocks(in: """
+        <pre><code class="language-shell-session">$ saga init mysite
+        $ cd mysite
+        $ saga dev</code></pre>
+        """))
       }
     }
 
     // Features
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "features") {
-      div(class: "mb-12 text-center") {
+      div(class: "mb-12 md:text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Built for developers who love Swift" }
         p { "Everything you need to build fast, type-safe static sites." }
       }
@@ -93,7 +85,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         featureCard(icon: iconBox, title: "Multiple Content Types", description: "Articles, apps, pages: each with their own metadata type, readers, and rendering pipeline.")
         featureCard(icon: iconRefresh, title: "Dev Server", description: [
           %"Run ",
-          code(class: "rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-sm") { "saga dev" },
+          code(class: "font-mono [word-spacing:-0.4ch]") { "saga dev" },
           %" for a local server with file watching and automatic browser reload.",
         ] as [Node])
         featureCard(icon: iconRocket, title: "Powerful Writers", description: "Item, list, tag, and year writers, Atom feed generation, and cache-busting hashed static assets, all built in.")
@@ -103,14 +95,11 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
     // Code Example
     section(class: "mx-auto max-w-5xl px-8 pt-8 pb-24", id: "code") {
-      div(class: "mb-10 text-center") {
+      div(class: "mb-10 md:text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Everything is Swift, everything is typed" }
         p(class: "text-base") { "Define your entire pipeline in Swift. From a simple blog..." }
       }
-      div(class: "mx-auto max-w-3xl overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900") {
-        div(class: "flex items-center gap-2 border-b border-zinc-800 px-5 py-3") {
-          span(class: "font-mono text-xs text-zinc-500") { "Sources/Run/main.swift" }
-        }
+      div(class: "mx-auto max-w-3xl") {
         Node.raw(Moon.shared.highlightCodeBlocks(in: """
         <pre><code class="language-swift">struct ArticleMetadata: Metadata {
           let tags: [String]
@@ -136,13 +125,10 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         """))
       }
       
-      div(class: "my-10 text-center") {
+      div(class: "my-10 md:text-center") {
         p(class: "text-base") { "...to a complex documentation site with API references, syntax highlighting, and HTML minification." }
       }
-      div(class: "mx-auto max-w-3xl overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900") {
-        div(class: "flex items-center gap-2 border-b border-zinc-800 px-5 py-3") {
-          span(class: "font-mono text-xs text-zinc-500") { "Sources/Run/main.swift" }
-        }
+      div(class: "mx-auto max-w-3xl") {
         Node.raw(Moon.shared.highlightCodeBlocks(in: """
         <pre><code class="language-swift">let saga = try Saga(input: "content", output: "deploy")
         
@@ -188,7 +174,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
     // Growing Beyond
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "beyond") {
-      div(class: "mb-12 text-center") {
+      div(class: "mb-12 md:text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
       }
@@ -210,7 +196,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
     // Plugins
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "plugins") {
-      div(class: "mb-12 text-center") {
+      div(class: "mb-12 md:text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Modular by design" }
         p(class: "text-base") { "Compose your site with readers, renderers, and plugins that fit your needs." }
       }
@@ -241,7 +227,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
     // Ecosystem
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "ecosystem") {
-      div(class: "mb-12 text-center") {
+      div(class: "mb-12 md:text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Tap into an ecosystem of Swift packages" }
         p { "Use these packages directly in your build pipeline for syntax highlighting, HTML transforms, and more." }
       }
