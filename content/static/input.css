@@ -52,11 +52,11 @@ body .background {
 }
 
 .sidebar-link {
-  @apply block text-sm text-zinc-400 px-3 py-1.5 rounded-md no-underline overflow-hidden text-ellipsis whitespace-nowrap transition-colors hover:text-zinc-200 hover:bg-zinc-900;
+  @apply block text-sm text-zinc-400 px-3 py-1.5 rounded-md no-underline overflow-hidden text-ellipsis whitespace-nowrap transition-colors;
 }
 
-.sidebar-link-active {
-  @apply text-accent! bg-zinc-900;
+.sidebar-link-active, .sidebar-link:hover {
+  @apply text-accent bg-zinc-800;
 }
 
 

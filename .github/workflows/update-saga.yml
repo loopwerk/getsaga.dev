@@ -1,0 +1,27 @@
+name: Update Saga dependency
+
+on:
+  repository_dispatch:
+    types: [saga-release]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0"
+
+      - name: Update Saga package
+        run: swift package update Saga
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet Package.resolved || (git add Package.resolved && git commit -m "Update Saga to latest version" && git push)

@@ -48,8 +48,11 @@ func renderAPIIndex(context: ItemsRenderingContext<APIMetadata>) -> Node {
       apiSidebar(currentSlug: "/api/", allItems: context.allItems)
 
       main(class: "doc-content min-w-0") {
-        h1 { "API Reference" }
+        h1 { "Saga \(sagaVersion) API Reference" }
         p { "Complete reference for all public types, protocols, and functions in the Saga module. Browse the symbols using the sidebar." }
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white! transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "https://github.com/loopwerk/Saga/releases/tag/\(sagaVersion)", target: "_blank") {
+          "Releases notes"
+        }
       }
     }
   }
@@ -156,7 +159,7 @@ func apiSidebar(currentSlug: String, allItems: [AnyItem]) -> Node {
   let apiItems = allItems.compactMap { $0 as? Item<APIMetadata> }
   let grouped = Dictionary(grouping: apiItems) { $0.metadata.kind }
 
-  return aside(class: "md:sticky md:top-20 md:self-start") {
+  return aside(class: "md:sticky md:top-20 md:self-start md:pt-2") {
     SymbolKind.allCases.filter(\.isTopLevel).compactMap { kind -> [Node]? in
       guard let items = grouped[kind], !items.isEmpty else { return nil }
       let sorted = items.sorted { $0.title < $1.title }

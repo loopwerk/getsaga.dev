@@ -6,7 +6,8 @@ import Saga
 // MARK: - Doc sidebar
 
 func docSidebar(docs: [Item<DocMetadata>], currentUrl: String) -> Node {
-  aside(class: "md:sticky md:top-20 md:self-start") {
+  aside(class: "md:sticky md:top-20 md:self-start md:pt-2") {
+    h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2") { "TOPICS" }
     ul(class: "list-none flex flex-col gap-1 p-0") {
       docs.map { doc in
         li {
