@@ -79,7 +79,14 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
           p(class: "text-zinc-500 text-sm") {
             "This site is built with"
             a(class: "accent-link", href: "https://github.com/loopwerk/Saga", target: "_blank") { "Saga" }
-            %"."
+            %" ("
+            %a(class: "accent-link", href: "https://github.com/loopwerk/getsaga.dev", target: "_blank") { "source" }
+            %")."
+          }
+          p(class: "text-zinc-500 text-sm") {
+            "©"
+            a(class: "hover:underline", href: "https://www.loopwerk.io", target: "_blank") { "Loopwerk" }
+            %". All rights reserved."
           }
         }
       }
@@ -91,7 +98,7 @@ func render404Page(context: PageRenderingContext) -> Node {
   layout(title: "Page not found", activePage: .other) {
     section(class: "mx-auto max-w-5xl px-8 pt-32 pb-24 text-center") {
       img(alt: "Saga", class: "mx-auto mb-10 block w-32 md:w-48", src: "/static/saga_ship.svg")
-      h1(class: "mb-4 text-4xl font-bold text-zinc-200") { "Lost at sea?" }
+      h1(class: "mb-4 text-4xl font-bold text-zinc-200") { "404 Lost at Sea" }
       p(class: "mb-8 text-lg") { "The page you're looking for doesn't exist." }
       a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/") {
         "Back to home"
