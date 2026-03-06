@@ -27,7 +27,11 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         meta(content: "Saga", name: "apple-mobile-web-app-title")
         meta(content: "#09090b", name: "theme-color")
         link(href: "/static/site.webmanifest", rel: "manifest")
+        if !isDev {
+          script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710"])
+        }
       }
+
       body(class: "bg-zinc-950 text-zinc-400 font-sans leading-relaxed antialiased \(activePage)") {
         div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl") {
           nav(class: "mx-auto flex h-full max-w-5xl items-center justify-between px-8") {
@@ -36,10 +40,24 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
             }
             ul(class: "flex list-none items-center gap-5 md:gap-8") {
               li {
-                a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .docs ? " text-zinc-200" : "")", href: "/docs/") { "Documentation" }
+                a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .docs ? " text-zinc-200" : "")", href: "/docs/") {
+                  span(class: "hidden md:block") {
+                    "Documentation"
+                  }
+                  span(class: "block md:hidden") {
+                    "Docs"
+                  }
+                }
               }
               li {
-                a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .api ? " text-zinc-200" : "")", href: "/api/") { "API reference" }
+                a(class: "text-sm transition-colors hover:text-zinc-200\(activePage == .api ? " text-zinc-200" : "")", href: "/api/") {
+                  span(class: "hidden md:block") {
+                    "API reference"
+                  }
+                  span(class: "block md:hidden") {
+                    "API"
+                  }
+                }
               }
               li {
                 a(class: "text-sm transition-colors hover:text-zinc-200", href: "https://www.loopwerk.io/open-source/support/", target: "_blank") { "Support" }
