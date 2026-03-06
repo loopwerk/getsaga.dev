@@ -20,8 +20,8 @@ func boldBlockquoteKeywords(_ html: String) -> String {
   )
 }
 
-func rewriteMarkdownDocs(saga: Saga) throws {
-  let docs = try (saga.inputPath + "docs").children()
+func rewriteMarkdownDocs(inputPath: Path) throws {
+  let docs = try (inputPath + "docs").children()
   
   // Build a mapping of filename (without extension) → title from the first heading
   var docTitles: [String: String] = [:]

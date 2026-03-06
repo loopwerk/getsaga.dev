@@ -105,7 +105,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     section(class: "mx-auto max-w-5xl px-8 pt-8 pb-24", id: "code") {
       div(class: "mb-10 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Everything is Swift, everything is typed" }
-        p(class: "text-base") { "Define your entire pipeline in Swift." }
+        p(class: "text-base") { "Define your entire pipeline in Swift. From a simple blog..." }
       }
       div(class: "mx-auto max-w-3xl overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900") {
         div(class: "flex items-center gap-2 border-b border-zinc-800 px-5 py-3") {
@@ -118,17 +118,69 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           var public: Bool = true
         }
 
-        try await Saga(input: "content", output: "deploy")
+        try await Saga(input: "articles", output: "deploy")
           .register(
-            folder: "articles",
             metadata: ArticleMetadata.self,
             readers: [.parsleyMarkdownReader],
             writers: [
               .itemWriter(swim(renderArticle)),
               .listWriter(swim(renderArticles), paginate: 20),
               .tagWriter(swim(renderTag), tags: \\.metadata.tags),
+              .listWriter(atomFeed(
+                title: "My Blog", 
+                baseURL: URL(string: "https://www.example.com")
+              ), output: "feed.xml"),
             ]
           )
+          .run()</code></pre>
+        """))
+      }
+      
+      div(class: "my-10 text-center") {
+        p(class: "text-base") { "...to a complex documentation site with API references, syntax highlighting, and HTML minification." }
+      }
+      div(class: "mx-auto max-w-3xl overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900") {
+        div(class: "flex items-center gap-2 border-b border-zinc-800 px-5 py-3") {
+          span(class: "font-mono text-xs text-zinc-500") { "Sources/Run/main.swift" }
+        }
+        Node.raw(Moon.shared.highlightCodeBlocks(in: """
+        <pre><code class="language-swift">let saga = try Saga(input: "content", output: "deploy")
+        
+        try await saga
+          // Guide documentation (from DocC markdown files)
+          .register(
+            folder: "docs",
+            metadata: DocMetadata.self,
+            readers: [.parsleyMarkdownReader],
+            itemProcessor: sequence(
+              processDocItem,
+              syntaxHighlight,
+              swiftSoupProcessor(processExternalLinks, renderToc)
+            ),
+            sorting: docSorting,
+            writers: [.itemWriter(swim(renderDocPage))]
+          )
+          
+          // API Reference (from symbol graph)
+          .register(
+            metadata: APIMetadata.self,
+            fetch: { try loadSymbolGraph(rootPath: saga.rootPath) },
+            writers: [
+              .itemWriter(swim(renderAPIPage)),
+              .listWriter(swim(renderAPIIndex), output: "api/index.html"),
+            ]
+          )
+          
+          // Landing page
+          .createPage("index.html", using: swim(renderHomePage))
+          
+          // Minify all HTML output (prod only)
+          .postProcess { html, _ in
+            guard !isDev else { return html }
+            return Bonsai.minifyHTML(html)
+          }
+          
+          // Run everything!
           .run()</code></pre>
         """))
       }
