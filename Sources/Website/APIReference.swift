@@ -16,6 +16,7 @@ enum SymbolKind: String, Codable, CaseIterable {
   case `func`
   case `typealias`
   case `enum`
+  case `extension`
   case typeMethod = "type.method"
   case `init`
   case typeProperty = "type.property"
@@ -35,6 +36,7 @@ enum SymbolKind: String, Codable, CaseIterable {
       case .func: "Function"
       case .typealias: "Type Alias"
       case .enum: "Enumeration"
+      case .extension: "Extension"
       case .typeMethod: "Type Method"
       case .`init`: "Initializer"
       case .typeProperty: "Type Property"
@@ -56,6 +58,7 @@ enum SymbolKind: String, Codable, CaseIterable {
       case .func: "Functions"
       case .typealias: "Type Aliases"
       case .enum: "Enumerations"
+      case .extension: "Extensions"
       case .typeMethod: "Type Methods"
       case .`init`: "Initializers"
       case .typeProperty: "Type Properties"
@@ -70,7 +73,7 @@ enum SymbolKind: String, Codable, CaseIterable {
 
   var isTopLevel: Bool {
     switch self {
-      case .class, .protocol, .struct, .var, .func, .typealias, .enum:
+      case .class, .protocol, .struct, .var, .func, .typealias, .enum, .extension:
         true
       default:
         false
@@ -108,6 +111,59 @@ struct APIMember: Codable {
   let deprecationMessage: String?
 }
 
+// MARK: - Symbol graph helpers
+
+/// Groups memberOf relationships by parent symbol ID.
+func groupMembersByParent(graph: SymbolGraph) -> [String: [String]] {
+  var result: [String: [String]] = [:]
+  for rel in graph.relationships where rel.kind == .memberOf {
+    result[rel.target, default: []].append(rel.source)
+  }
+  return result
+}
+
+/// Collects conformances from a symbol graph, keyed by source symbol ID.
+func collectConformances(graph: SymbolGraph) -> [String: [Conformance]] {
+  let symbols = graph.symbols
+  var result: [String: [Conformance]] = [:]
+  for rel in graph.relationships where rel.kind == .conformsTo {
+    if let targetSymbol = symbols[rel.target] {
+      let slug = targetSymbol.names.title.lowercased()
+      result[rel.source, default: []].append(
+        Conformance(name: targetSymbol.names.title, url: "/api/\(slug)/")
+      )
+    } else if let fallback = rel.targetFallback, !fallback.hasSuffix("Metatype") {
+      result[rel.source, default: []].append(
+        Conformance(name: fallback, url: nil)
+      )
+    }
+  }
+  return result
+}
+
+/// Converts member symbol IDs to sorted APIMember arrays.
+func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [APIMember] {
+  ids.compactMap { memberID -> APIMember? in
+    guard let symbol = symbols[memberID] else { return nil }
+    guard symbol.accessLevel.rawValue == "public" else { return nil }
+    guard let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier) else { return nil }
+
+    let (isDeprecated, deprecationMessage) = checkDeprecation(symbol: symbol)
+
+    return APIMember(
+      name: symbol.names.title,
+      kind: kind,
+      declaration: renderDeclaration(symbol: symbol),
+      docComment: renderDocComment(symbol: symbol),
+      isDeprecated: isDeprecated,
+      deprecationMessage: deprecationMessage
+    )
+  }.sorted { a, b in
+    if a.kind != b.kind { return a.kind.order < b.kind.order }
+    return a.name < b.name
+  }
+}
+
 // MARK: - Symbol graph loading
 
 func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
@@ -122,6 +178,8 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
   let graph = try JSONDecoder().decode(SymbolGraph.self, from: data)
 
   let symbols = graph.symbols
+  let membersByParent = groupMembersByParent(graph: graph)
+  let conformancesBySymbol = collectConformances(graph: graph)
 
   // Find top-level symbols (public, not members of other symbols)
   let memberTargets = Set(
@@ -129,27 +187,6 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
       .filter { $0.kind == .memberOf }
       .map { $0.source }
   )
-
-  // Group members by their parent
-  var membersByParent: [String: [String]] = [:]
-  for rel in graph.relationships where rel.kind == .memberOf {
-    membersByParent[rel.target, default: []].append(rel.source)
-  }
-
-  // Collect conformances by source symbol
-  var conformancesBySymbol: [String: [Conformance]] = [:]
-  for rel in graph.relationships where rel.kind == .conformsTo {
-    if let targetSymbol = symbols[rel.target] {
-      let slug = targetSymbol.names.title.lowercased()
-      conformancesBySymbol[rel.source, default: []].append(
-        Conformance(name: targetSymbol.names.title, url: "/api/\(slug)/")
-      )
-    } else if let fallback = rel.targetFallback, !fallback.hasSuffix("Metatype") {
-      conformancesBySymbol[rel.source, default: []].append(
-        Conformance(name: fallback, url: nil)
-      )
-    }
-  }
 
   // Collect conforming types (reverse of conformances) for protocols
   var conformingTypesBySymbol: [String: [Conformance]] = [:]
@@ -183,29 +220,7 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
     let declaration = renderDeclaration(symbol: symbol)
     let docComment = renderDocComment(symbol: symbol)
     let (isDeprecated, deprecationMessage) = checkDeprecation(symbol: symbol)
-
-    let memberIDs = membersByParent[id] ?? []
-    let members = memberIDs.compactMap { memberID -> APIMember? in
-      guard let memberSymbol = symbols[memberID] else { return nil }
-      guard memberSymbol.accessLevel.rawValue == "public" else { return nil }
-
-      let (memberDeprecated, memberDeprecMsg) = checkDeprecation(symbol: memberSymbol)
-
-      guard let memberKind = SymbolKind(rawValue: memberSymbol.kind.identifier.identifier) else { return nil }
-
-      return APIMember(
-        name: memberSymbol.names.title,
-        kind: memberKind,
-        declaration: renderDeclaration(symbol: memberSymbol),
-        docComment: renderDocComment(symbol: memberSymbol),
-        isDeprecated: memberDeprecated,
-        deprecationMessage: memberDeprecMsg
-      )
-    }.sorted { a, b in
-      if a.kind != b.kind { return a.kind.order < b.kind.order }
-      return a.name < b.name
-    }
-
+    let members = resolveMembers(ids: membersByParent[id] ?? [], symbols: symbols)
     let conformances = (conformancesBySymbol[id] ?? []).sorted { $0.name < $1.name }
     let conformingTypes = (conformingTypesBySymbol[id] ?? []).sorted { $0.name < $1.name }
 
@@ -231,9 +246,80 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
     items.append(item)
   }
 
+  // Load extension symbol graphs (Saga@Swift.symbols.json, Saga@PathKit.symbols.json, etc.)
+  let extensionItems = try loadExtensionSymbolGraphs(rootPath: rootPath)
+  items.append(contentsOf: extensionItems)
+
   return items.sorted { a, b in
     if a.metadata.kind != b.metadata.kind { return a.metadata.kind.order < b.metadata.kind.order }
     return a.title < b.title
+  }
+}
+
+// MARK: - Extension symbol graph loading
+
+func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
+  let dir = rootPath + ".build" + "symbolgraph"
+  guard dir.exists else { return [] }
+
+  let extensionFiles = try dir.children().filter { $0.lastComponent.hasPrefix("Saga@") && $0.extension == "json" }
+  guard !extensionFiles.isEmpty else { return [] }
+
+  // Collect all extension members and conformances grouped by extended type name
+  var membersByType: [String: [APIMember]] = [:]
+  var declarationsByType: [String: String] = [:]
+  var conformancesByType: [String: [Conformance]] = [:]
+
+  for file in extensionFiles {
+    let data = try Data(contentsOf: URL(fileURLWithPath: file.string))
+    let graph = try JSONDecoder().decode(SymbolGraph.self, from: data)
+
+    let symbols = graph.symbols
+    let membersByParent = groupMembersByParent(graph: graph)
+    let conformancesByBlock = collectConformances(graph: graph)
+
+    for (id, symbol) in symbols {
+      guard symbol.accessLevel.rawValue == "public" else { continue }
+      guard SymbolKind(rawValue: symbol.kind.identifier.identifier) == .extension else { continue }
+
+      let typeName = symbol.names.title
+      declarationsByType[typeName] = renderDeclaration(symbol: symbol)
+      membersByType[typeName, default: []].append(contentsOf: resolveMembers(ids: membersByParent[id] ?? [], symbols: symbols))
+      conformancesByType[typeName, default: []].append(contentsOf: conformancesByBlock[id] ?? [])
+    }
+  }
+
+  // Create one Item per extended type
+  return membersByType.map { typeName, members in
+    let sortedMembers = members.sorted { a, b in
+      if a.kind != b.kind { return a.kind.order < b.kind.order }
+      return a.name < b.name
+    }
+
+    // Deduplicate conformances by name
+    let conformances = Array(Set((conformancesByType[typeName] ?? []).map(\.name)))
+      .sorted()
+      .map { Conformance(name: $0, url: nil) }
+
+    let declaration = declarationsByType[typeName] ?? escapeHTML("extension \(typeName)")
+    let slug = typeName.lowercased()
+
+    let metadata = APIMetadata(
+      kind: .extension,
+      declaration: declaration,
+      isDeprecated: false,
+      deprecationMessage: nil,
+      members: sortedMembers,
+      conformances: conformances,
+      conformingTypes: []
+    )
+
+    return Item<APIMetadata>(
+      title: typeName,
+      body: "",
+      relativeDestination: PathKit.Path("api/\(slug)/index.html"),
+      metadata: metadata
+    )
   }
 }
 

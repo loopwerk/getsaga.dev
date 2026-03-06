@@ -23,9 +23,10 @@ copy-docs:
 
 # Generate symbol graph from the Saga library
 symbol-graph:
-  swift package --package-path .build/checkouts/Saga dump-symbol-graph 2>/dev/null || true
+  swift package --package-path .build/checkouts/Saga dump-symbol-graph --emit-extension-block-symbols 2>/dev/null || true
   mkdir -p .build/symbolgraph
   cp .build/checkouts/Saga/.build/*/symbolgraph/Saga.symbols.json .build/symbolgraph/
+  cp .build/checkouts/Saga/.build/*/symbolgraph/Saga@*.symbols.json .build/symbolgraph/ 2>/dev/null || true
 
 # Clean build artifacts
 clean:
