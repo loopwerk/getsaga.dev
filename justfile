@@ -8,7 +8,7 @@ resolve:
 
 # Compile without running
 compile:
-  swift build --product Website
+  swift build --product Website -j 1
 
 # Full build
 build: clean copy-docs symbol-graph
@@ -23,7 +23,7 @@ copy-docs:
 
 # Generate symbol graph from the Saga library
 symbol-graph:
-  swift package --package-path .build/checkouts/Saga dump-symbol-graph --pretty-print 2>/dev/null || true
+  swift package --package-path .build/checkouts/Saga dump-symbol-graph 2>/dev/null || true
   mkdir -p .build/symbolgraph
   cp .build/checkouts/Saga/.build/*/symbolgraph/Saga.symbols.json .build/symbolgraph/
 

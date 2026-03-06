@@ -9,6 +9,7 @@
 
 html {
   @apply text-lg scroll-smooth;
+  scroll-padding-top: 5rem;
 }
 
 body.home .background, body.other .background {
@@ -66,7 +67,6 @@ body.home .background, body.other .background {
 /* Member items (DocC-style) */
 .member-item {
   @apply py-4;
-  scroll-margin-top: 5rem;
 }
 
 .member-method,
