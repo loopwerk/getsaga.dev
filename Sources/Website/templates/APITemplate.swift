@@ -94,6 +94,17 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
           }
         }
 
+        if !meta.mentionedIn.isEmpty {
+          h2 { "Mentioned In" }
+          ul {
+            meta.mentionedIn.map { mention in
+              li {
+                a(href: mention.url) { mention.title }
+              }
+            }
+          }
+        }
+
         renderMemberGroups(meta.members)
 
         if !meta.conformances.isEmpty || !meta.conformingTypes.isEmpty {

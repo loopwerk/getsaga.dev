@@ -92,6 +92,11 @@ struct Conformance: Codable {
   let url: String?
 }
 
+struct DocMention: Codable {
+  let title: String
+  let url: String
+}
+
 struct APIMetadata: Metadata {
   let kind: SymbolKind
   let declaration: String
@@ -100,6 +105,7 @@ struct APIMetadata: Metadata {
   let members: [APIMember]
   let conformances: [Conformance]
   let conformingTypes: [Conformance]
+  let mentionedIn: [DocMention]
 }
 
 struct APIMember: Codable {
@@ -224,6 +230,9 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
     let conformances = (conformancesBySymbol[id] ?? []).sorted { $0.name < $1.name }
     let conformingTypes = (conformingTypesBySymbol[id] ?? []).sorted { $0.name < $1.name }
 
+    let mentions = (symbolMentions[symbol.names.title] ?? [])
+      .map { DocMention(title: $0.title, url: $0.url) }
+
     let metadata = APIMetadata(
       kind: kind,
       declaration: declaration,
@@ -231,7 +240,8 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
       deprecationMessage: deprecationMessage,
       members: members,
       conformances: conformances,
-      conformingTypes: conformingTypes
+      conformingTypes: conformingTypes,
+      mentionedIn: mentions
     )
 
     let slug = symbol.names.title.lowercased()
@@ -304,6 +314,9 @@ func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetada
     let declaration = declarationsByType[typeName] ?? escapeHTML("extension \(typeName)")
     let slug = typeName.lowercased()
 
+    let mentions = (symbolMentions[typeName] ?? [])
+      .map { DocMention(title: $0.title, url: $0.url) }
+
     let metadata = APIMetadata(
       kind: .extension,
       declaration: declaration,
@@ -311,7 +324,8 @@ func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetada
       deprecationMessage: nil,
       members: sortedMembers,
       conformances: conformances,
-      conformingTypes: []
+      conformingTypes: [],
+      mentionedIn: mentions
     )
 
     return Item<APIMetadata>(

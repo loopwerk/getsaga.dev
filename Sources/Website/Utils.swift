@@ -14,6 +14,9 @@ let sagaVersion: String = {
 
 let docOrder = ["index", "Installation", "GettingStarted", "Architecture", "AdvancedUsage"]
 
+/// Maps symbol names (e.g. "Writer") to the doc articles that mention them.
+var symbolMentions: [String: [(title: String, url: String)]] = [:]
+
 func docSorting(_ a: Item<DocMetadata>, _ b: Item<DocMetadata>) -> Bool {
   let aIndex = docOrder.firstIndex(of: a.filenameWithoutExtension) ?? 999
   let bIndex = docOrder.firstIndex(of: b.filenameWithoutExtension) ?? 999
@@ -29,9 +32,27 @@ func boldBlockquoteKeywords(_ html: String) -> String {
   )
 }
 
+private struct CachedMention: Codable {
+  let title: String
+  let url: String
+}
+
 func rewriteMarkdownDocs(inputPath: Path) throws {
-  let docs = try (inputPath + "docs").children()
-  
+  let docsPath = inputPath + "docs"
+  let markerPath = docsPath + ".rewritten.json"
+
+  // If already rewritten in this dev session, load cached mentions and skip
+  if markerPath.exists {
+    let data: Data = try markerPath.read()
+    let cached = try JSONDecoder().decode([String: [CachedMention]].self, from: data)
+    for (symbol, mentions) in cached {
+      symbolMentions[symbol] = mentions.map { (title: $0.title, url: $0.url) }
+    }
+    return
+  }
+
+  let docs = try docsPath.children().filter { $0.extension == "md" }
+
   // Build a mapping of filename (without extension) → title from the first heading
   var docTitles: [String: String] = [:]
   for doc in docs {
@@ -46,12 +67,32 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
       docTitles[filename] = title
     }
   }
-  
+
   for doc in docs {
     let markdown: String = try doc.read()
     let rewritten = rewriteMarkdown(markdown: markdown, docTitles: docTitles)
     try doc.write(rewritten)
+
+    // Collect symbol mentions for "Mentioned in" on API pages
+    let filename = doc.lastComponentWithoutExtension
+    let title = docTitles[filename] ?? filename
+    let url = "/docs/\(filename.lowercased())/"
+    let mentionedSymbols = extractSymbolMentions(markdown: markdown)
+    for symbol in mentionedSymbols {
+      symbolMentions[symbol, default: []].append((title: title, url: url))
+    }
   }
+
+  // Deduplicate mentions (a symbol may be referenced multiple times in one article)
+  for (symbol, mentions) in symbolMentions {
+    var seen = Set<String>()
+    symbolMentions[symbol] = mentions.filter { seen.insert($0.url).inserted }
+  }
+
+  // Cache mentions so subsequent dev rebuilds can skip rewriting
+  let cacheable = symbolMentions.mapValues { $0.map { CachedMention(title: $0.title, url: $0.url) } }
+  let data = try JSONEncoder().encode(cacheable)
+  try markerPath.write(data)
 }
 
 /// We get Markdown with DocC syntax, that normal markdown parsers don't understand,
@@ -167,6 +208,25 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
   result = output.joined(separator: "\n")
 
   return result
+}
+
+/// Extracts symbol names referenced via ``Symbol`` or ``Parent/member`` in DocC markdown.
+/// Returns a set of top-level symbol names (the parent for qualified references).
+func extractSymbolMentions(markdown: String) -> Set<String> {
+  var symbols = Set<String>()
+  let pattern = "(?<!# )``([^\\n`]+)``"
+  let regex = try! NSRegularExpression(pattern: pattern)
+  for match in regex.matches(in: markdown, range: NSRange(markdown.startIndex..., in: markdown)) {
+    if let range = Range(match.range(at: 1), in: markdown) {
+      let content = String(markdown[range])
+      if let slashIndex = content.firstIndex(of: "/") {
+        symbols.insert(String(content[content.startIndex..<slashIndex]))
+      } else {
+        symbols.insert(content)
+      }
+    }
+  }
+  return symbols
 }
 
 func inlineMarkdown(_ text: String) -> String {
