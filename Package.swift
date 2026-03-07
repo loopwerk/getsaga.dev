@@ -21,7 +21,7 @@ let package = Package(
     .executableTarget(
       name: "Website",
       dependencies: [
-        .product(name: "SymbolKit", package: "swift-docc-symbolkit"),
+        "SymbolKit",
         "Saga",
         "SagaParsleyMarkdownReader",
         "SagaSwimRenderer",

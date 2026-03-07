@@ -339,30 +339,104 @@ func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetada
 
 // MARK: - Declaration rendering
 
+func renderFragment(_ fragment: SymbolGraph.Symbol.DeclarationFragments.Fragment) -> String {
+  let text = escapeHTML(fragment.spelling)
+  switch fragment.kind {
+    case .keyword:
+      return #"<span class="token keyword">\#(text)</span>"#
+    case .attribute:
+      return #"<span class="token attribute atrule">\#(text)</span>"#
+    case .typeIdentifier, .genericParameter:
+      return #"<span class="token class-name">\#(text)</span>"#
+    case .identifier:
+      return #"<span class="token function-definition function">\#(text)</span>"#
+    default:
+      return text
+  }
+}
+
 func renderDeclaration(symbol: SymbolGraph.Symbol) -> String {
   guard let fragments = symbol.declarationFragments else {
     return escapeHTML(symbol.names.title)
   }
 
-  return fragments.map { fragment in
-    let text = escapeHTML(fragment.spelling)
-    switch fragment.kind {
-      case .keyword:
-        return #"<span class="token keyword">\#(text)</span>"#
-      case .attribute:
-        return #"<span class="token attribute atrule">\#(text)</span>"#
-      case .typeIdentifier, .genericParameter:
-        return #"<span class="token class-name">\#(text)</span>"#
-      case .identifier:
-        return #"<span class="token function-definition function">\#(text)</span>"#
-      case .externalParameter, .internalParameter:
-        return text
-      case .text:
-        return text
-      default:
-        return text
+  // Separate declaration-level attributes (like @discardableResult) from the rest.
+  // These always go on their own line for long declarations.
+  var attrPrefix = ""
+  var bodyFragments = fragments[...]
+  while let first = bodyFragments.first, first.kind == .attribute || (first.kind == .text && first.spelling.trimmingCharacters(in: .whitespaces).isEmpty && attrPrefix.hasSuffix("\n")) {
+    if first.kind == .attribute {
+      attrPrefix += renderFragment(first) + "\n"
     }
-  }.joined()
+    bodyFragments = bodyFragments.dropFirst()
+  }
+
+  let bodyPlainText = bodyFragments.map(\.spelling).joined()
+  let bodyInline = bodyFragments.map { renderFragment($0) }.joined()
+
+  // If the body (without attributes) fits on one line, just add attribute prefix
+  guard bodyPlainText.count > 80 else { return attrPrefix + bodyInline }
+
+  // Only format multi-line if there are actual parameters
+  let hasParams = bodyFragments.contains {
+    $0.kind == .externalParameter || $0.kind == .internalParameter
+  }
+  guard hasParams else { return attrPrefix + bodyInline }
+
+  // Build formatted declaration with one parameter per line.
+  // Walk through fragments, tracking paren depth to identify the main
+  // parameter list, and insert line breaks at `(`, `,`, and `)`.
+  let indent = "  "
+  var result = attrPrefix
+  var parenDepth = 0
+  var paramDepth = -1 // set to the paren depth of the main param list
+  var paramListClosed = false
+
+  for fragment in bodyFragments {
+    // Non-text fragments never contain structural chars — render directly
+    guard fragment.kind == .text else {
+      result += renderFragment(fragment)
+      continue
+    }
+
+    // Text fragments may contain (, ), and , that define parameter boundaries.
+    // Process char-by-char to insert line breaks at the right paren depth.
+    let spelling = fragment.spelling
+    var i = spelling.startIndex
+    while i < spelling.endIndex {
+      let char = spelling[i]
+
+      if char == "(" {
+        parenDepth += 1
+        if paramDepth == -1 { paramDepth = parenDepth }
+        result += "("
+        if parenDepth == paramDepth && !paramListClosed {
+          result += "\n" + indent
+        }
+      } else if char == ")" && parenDepth == paramDepth && !paramListClosed {
+        result += "\n)"
+        parenDepth -= 1
+        paramListClosed = true
+      } else if char == ")" {
+        parenDepth -= 1
+        result += ")"
+      } else if char == "," && parenDepth == paramDepth && !paramListClosed {
+        let next = spelling.index(after: i)
+        if next < spelling.endIndex && spelling[next] == " " {
+          result += ",\n" + indent
+          i = spelling.index(after: next)
+          continue
+        }
+        result += ","
+      } else {
+        result += escapeHTML(String(char))
+      }
+
+      i = spelling.index(after: i)
+    }
+  }
+
+  return result
 }
 
 // MARK: - Doc comment rendering
