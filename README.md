@@ -23,6 +23,7 @@ The site is itself built with Saga: it parses Saga's own source code and DocC fi
 - [Bonsai](https://github.com/loopwerk/Bonsai) — HTML minification
 - [SwiftTailwind](https://github.com/loopwerk/SwiftTailwind) — Tailwind CSS
 - [SymbolKit](https://github.com/swiftlang/swift-docc-symbolkit) — symbol graph parsing for the API reference
+- [Sigil](https://github.com/loopwerk/Sigil) — renders the SymbolKit declarations as syntax-highlighted HTML
 
 ## Development
 
