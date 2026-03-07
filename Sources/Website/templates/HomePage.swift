@@ -124,14 +124,14 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           .run()</code></pre>
         """))
       }
-      
+
       div(class: "my-10 md:text-center") {
         p(class: "text-base") { "...to a complex documentation site with API references, syntax highlighting, and HTML minification." }
       }
       div(class: "mx-auto max-w-3xl") {
         Node.raw(Moon.shared.highlightCodeBlocks(in: """
         <pre><code class="language-swift">let saga = try Saga(input: "content", output: "deploy")
-        
+
         try await saga
           // Guide documentation (from DocC markdown files)
           .register(

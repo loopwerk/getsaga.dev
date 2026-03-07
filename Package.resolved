@@ -91,6 +91,15 @@
       }
     },
     {
+      "identity" : "sigil",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/loopwerk/Sigil",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1d0ced21bcb2746716dc3c1a707240257f1b974c"
+      }
+    },
+    {
       "identity" : "spectre",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kylef/Spectre.git",

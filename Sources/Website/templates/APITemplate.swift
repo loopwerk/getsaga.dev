@@ -1,16 +1,6 @@
 import HTML
 import Saga
 
-// MARK: - HTML escaping
-
-func escapeHTML(_ string: String) -> String {
-  string
-    .replacingOccurrences(of: "&", with: "&amp;")
-    .replacingOccurrences(of: "<", with: "&lt;")
-    .replacingOccurrences(of: ">", with: "&gt;")
-    .replacingOccurrences(of: "\"", with: "&quot;")
-}
-
 // MARK: - Breakable title
 
 /// Inserts <wbr> at camelCase boundaries and after colons so long titles can wrap.

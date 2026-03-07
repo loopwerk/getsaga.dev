@@ -1,7 +1,7 @@
 import Foundation
-import Saga
-import PathKit
 import Parsley
+import PathKit
+import Saga
 
 let sagaVersion: String = {
   let data = try! Data(contentsOf: URL(fileURLWithPath: "Package.resolved"))
@@ -220,7 +220,7 @@ func extractSymbolMentions(markdown: String) -> Set<String> {
     if let range = Range(match.range(at: 1), in: markdown) {
       let content = String(markdown[range])
       if let slashIndex = content.firstIndex(of: "/") {
-        symbols.insert(String(content[content.startIndex..<slashIndex]))
+        symbols.insert(String(content[content.startIndex ..< slashIndex]))
       } else {
         symbols.insert(content)
       }

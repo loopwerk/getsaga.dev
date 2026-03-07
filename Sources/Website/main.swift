@@ -1,12 +1,12 @@
+import Bonsai
 import Foundation
 import Saga
 import SagaParsleyMarkdownReader
 import SagaSwimRenderer
 import SagaUtils
 import SwiftTailwind
-import Bonsai
 
-// Compile Tailwind CSS
+/// Compile Tailwind CSS
 let tailwind = SwiftTailwind(version: "4.2.1")
 try await tailwind.run(
   input: "content/static/input.css",
@@ -62,7 +62,7 @@ try await saga
   // Run everything!
   .run()
 
-// Index the site with Pagefind
+/// Index the site with Pagefind
 let pagefind = Process()
 pagefind.executableURL = URL(fileURLWithPath: "/usr/bin/env")
 pagefind.arguments = ["pnpm", "pagefind", "--site", "deploy"]
