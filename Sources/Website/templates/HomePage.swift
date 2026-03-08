@@ -86,16 +86,16 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
 
       div(class: "grid gap-5 md:grid-cols-2 lg:grid-cols-3") {
-        featureCard(icon: iconShield, title: "Type-Safe Metadata", color: "#ff5758", description: "Define custom metadata types with full compile-time safety. Catch errors before they reach production.")
-        featureCard(icon: iconChevrons, title: "Reader → Writer Pipeline", color: "#8be9fd", description: "A clean, extensible architecture with pluggable readers, processors, and writers.")
-        featureCard(icon: iconBox, title: "Multiple Content Types", color: "#50fa7b", description: "Articles, apps, pages: each with their own metadata type, readers, and rendering pipeline.")
-        featureCard(icon: iconRefresh, title: "Dev Server", color: "#f1fa8c", description: [
+        featureCard(icon: iconShield, title: "Type-Safe Metadata", color: "#fb94ff", description: "Define custom metadata types with full compile-time safety. Catch errors before they reach production.")
+        featureCard(icon: iconChevrons, title: "Reader → Writer Pipeline", color: "#ff618c", description: "A clean, extensible architecture with pluggable readers, processors, and writers.")
+        featureCard(icon: iconBox, title: "Multiple Content Types", color: "#a5ff90", description: "Articles, apps, pages: each with their own metadata type, readers, and rendering pipeline.")
+        featureCard(icon: iconRefresh, title: "Dev Server", color: "#fad000", description: [
           %"Run ",
           code(class: "font-mono [word-spacing:-0.4ch]") { "saga dev" },
           %" for a local server with file watching and automatic browser reload.",
         ] as [Node])
-        featureCard(icon: iconRocket, title: "Powerful Writers", color: "#bd93f9", description: "Item, list, tag, and year writers, Atom feed generation, and cache-busting hashed static assets, all built in.")
-        featureCard(icon: iconCode, title: "Code over Configuration", color: "#ff79c6", description: "No YAML, no magic. Your site is a Swift program: explicit, readable, debuggable.")
+        featureCard(icon: iconRocket, title: "Powerful Writers", color: "#b362ff", description: "Item, list, tag, and year writers, Atom feed generation, and cache-busting hashed static assets, all built in.")
+        featureCard(icon: iconCode, title: "Code over Configuration", color: "#ff9d00", description: "No YAML, no magic. Your site is a Swift program: explicit, readable, debuggable.")
       }
     }
 
@@ -184,10 +184,34 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
       }
-      div(class: "grid gap-5 md:grid-cols-2 lg:grid-cols-3") {
-        featureCard(icon: iconLayers, title: "Typed metadata", color: "#ff5758", description: "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently.")
-        featureCard(icon: iconDatabase, title: "Programmatic content", color: "#8be9fd", description: "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. File-based and programmatic steps can be freely mixed.")
-        featureCard(icon: iconSliders, title: "Your build, your rules", color: "#50fa7b", description: "Register custom processing steps for anything beyond the standard pipeline: generate images, build a search index, or minify HTML. If Swift can do it, your build can too.")
+      div(class: "mx-auto flex max-w-2xl flex-col gap-8", style: "--card-accent: var(--color-accent)") {
+        div(class: "flex gap-4") {
+          div(class: "feature-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg") {
+            Node.raw(iconLayers)
+          }
+          div {
+            h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Typed metadata" }
+            p(class: "text-base leading-relaxed") { "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently." }
+          }
+        }
+        div(class: "flex gap-4") {
+          div(class: "feature-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg") {
+            Node.raw(iconDatabase)
+          }
+          div {
+            h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Programmatic content" }
+            p(class: "text-base leading-relaxed") { "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. File-based and programmatic steps can be freely mixed." }
+          }
+        }
+        div(class: "flex gap-4") {
+          div(class: "feature-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg") {
+            Node.raw(iconSliders)
+          }
+          div {
+            h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Your build, your rules" }
+            p(class: "text-base leading-relaxed") { "Register custom processing steps for anything beyond the standard pipeline: generate images, build a search index, or minify HTML. If Swift can do it, your build can too." }
+          }
+        }
       }
     }
 
@@ -250,7 +274,7 @@ func featureCard(icon: String, title: String, color: String, description: NodeCo
       Node.raw(icon)
     }
     h3(class: "mb-1 font-semibold text-zinc-200") { title }
-    p(class: "text-base leading-normal") { description }
+    p(class: "text-base leading-normal max-w-2xl") { description }
   }
 }
 
