@@ -21,14 +21,6 @@ body .background {
   background-position: top center;
 }
 
-/* Feature card accent colors */
-.feature-card:nth-child(1) { --card-accent: #ff5758; }
-.feature-card:nth-child(2) { --card-accent: #8be9fd; }
-.feature-card:nth-child(3) { --card-accent: #50fa7b; }
-.feature-card:nth-child(4) { --card-accent: #f1fa8c; }
-.feature-card:nth-child(5) { --card-accent: #bd93f9; }
-.feature-card:nth-child(6) { --card-accent: #ff79c6; }
-
 .feature-card {
   background: linear-gradient(180deg, color-mix(in srgb, var(--card-accent) 8%, var(--color-zinc-900)) 0%, var(--color-zinc-900) 50%);
   border-top: 2px solid var(--card-accent);

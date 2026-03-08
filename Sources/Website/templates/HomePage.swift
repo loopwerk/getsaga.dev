@@ -15,6 +15,12 @@ let iconRocket = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap
 
 let iconCode = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>"#
 
+let iconLayers = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>"#
+
+let iconDatabase = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>"#
+
+let iconSliders = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>"#
+
 // MARK: - Home page template
 
 func renderHomePage(context: PageRenderingContext) -> Node {
@@ -80,16 +86,16 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
 
       div(class: "grid gap-5 md:grid-cols-2 lg:grid-cols-3") {
-        featureCard(icon: iconShield, title: "Type-Safe Metadata", description: "Define custom metadata types with full compile-time safety. Catch errors before they reach production.")
-        featureCard(icon: iconChevrons, title: "Reader → Writer Pipeline", description: "A clean, extensible architecture with pluggable readers, processors, and writers.")
-        featureCard(icon: iconBox, title: "Multiple Content Types", description: "Articles, apps, pages: each with their own metadata type, readers, and rendering pipeline.")
-        featureCard(icon: iconRefresh, title: "Dev Server", description: [
+        featureCard(icon: iconShield, title: "Type-Safe Metadata", color: "#ff5758", description: "Define custom metadata types with full compile-time safety. Catch errors before they reach production.")
+        featureCard(icon: iconChevrons, title: "Reader → Writer Pipeline", color: "#8be9fd", description: "A clean, extensible architecture with pluggable readers, processors, and writers.")
+        featureCard(icon: iconBox, title: "Multiple Content Types", color: "#50fa7b", description: "Articles, apps, pages: each with their own metadata type, readers, and rendering pipeline.")
+        featureCard(icon: iconRefresh, title: "Dev Server", color: "#f1fa8c", description: [
           %"Run ",
           code(class: "font-mono [word-spacing:-0.4ch]") { "saga dev" },
           %" for a local server with file watching and automatic browser reload.",
         ] as [Node])
-        featureCard(icon: iconRocket, title: "Powerful Writers", description: "Item, list, tag, and year writers, Atom feed generation, and cache-busting hashed static assets, all built in.")
-        featureCard(icon: iconCode, title: "Code over Configuration", description: "No YAML, no magic. Your site is a Swift program: explicit, readable, debuggable.")
+        featureCard(icon: iconRocket, title: "Powerful Writers", color: "#bd93f9", description: "Item, list, tag, and year writers, Atom feed generation, and cache-busting hashed static assets, all built in.")
+        featureCard(icon: iconCode, title: "Code over Configuration", color: "#ff79c6", description: "No YAML, no magic. Your site is a Swift program: explicit, readable, debuggable.")
       }
     }
 
@@ -178,19 +184,10 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
       }
-      div(class: "mx-auto flex max-w-2xl flex-col gap-8") {
-        div {
-          h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Typed metadata" }
-          p(class: "text-base leading-relaxed") { "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently." }
-        }
-        div {
-          h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Programmatic content" }
-          p(class: "text-base leading-relaxed") { "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. File-based and programmatic steps can be freely mixed." }
-        }
-        div {
-          h3(class: "mb-1 text-lg font-bold text-zinc-200") { "Your build, your rules" }
-          p(class: "text-base leading-relaxed") { "Register custom processing steps for anything beyond the standard pipeline: generate images, build a search index, or minify HTML. If Swift can do it, your build can too." }
-        }
+      div(class: "grid gap-5 md:grid-cols-2 lg:grid-cols-3") {
+        featureCard(icon: iconLayers, title: "Typed metadata", color: "#ff5758", description: "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently.")
+        featureCard(icon: iconDatabase, title: "Programmatic content", color: "#8be9fd", description: "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. File-based and programmatic steps can be freely mixed.")
+        featureCard(icon: iconSliders, title: "Your build, your rules", color: "#50fa7b", description: "Register custom processing steps for anything beyond the standard pipeline: generate images, build a search index, or minify HTML. If Swift can do it, your build can too.")
       }
     }
 
@@ -234,12 +231,12 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       ul(class: "mx-auto grid max-w-2xl list-none gap-5 md:grid-cols-2") {
         pluginLink(name: "Moon", url: "https://github.com/loopwerk/Moon", detail: "Multi-language syntax highlighting")
         pluginLink(name: "Bonsai", url: "https://github.com/loopwerk/Bonsai", detail: "HTML minification")
-        pluginLink(name: "Splash", url: "https://github.com/JohnSundell/Splash", detail: "A syntax highlighting for Swift code")
         pluginLink(name: "SwiftSoup", url: "https://github.com/scinfu/SwiftSoup", detail: "HTML parsing, manipulation, and extraction")
         pluginLink(name: "SwiftGD", url: "https://github.com/twostraws/SwiftGD", detail: "Image generation")
         pluginLink(name: "SwiftPlot", url: "https://github.com/KarthikRIyer/swiftplot", detail: "Data visualization")
         pluginLink(name: "SwiftDate", url: "https://github.com/malcommac/SwiftDate", detail: "Easy date manipulation and formatting")
         pluginLink(name: "SwiftTailwind", url: "https://github.com/loopwerk/SwiftTailwind", detail: "TailwindCSS for Swift")
+        pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
       }
     }
   }
@@ -247,8 +244,8 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
 // MARK: - Helpers
 
-func featureCard(icon: String, title: String, description: NodeConvertible) -> Node {
-  div(class: "feature-card rounded-xl border border-zinc-800 p-7 transition-colors") {
+func featureCard(icon: String, title: String, color: String, description: NodeConvertible) -> Node {
+  div(class: "feature-card rounded-xl border border-zinc-800 p-7 transition-colors", style: "--card-accent: \(color)") {
     div(class: "feature-icon mb-3 flex h-9 w-9 items-center justify-center rounded-lg") {
       Node.raw(icon)
     }
