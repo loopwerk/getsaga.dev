@@ -192,7 +192,7 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
   let memberTargets = Set(
     graph.relationships
       .filter { $0.kind == .memberOf }
-      .map { $0.source }
+      .map(\.source)
   )
 
   // Collect conforming types (reverse of conformances) for protocols
@@ -345,7 +345,7 @@ func renderDocComment(symbol: SymbolGraph.Symbol) -> String? {
     return nil
   }
 
-  var text = docComment.lines.map { $0.text }.joined(separator: "\n")
+  var text = docComment.lines.map(\.text).joined(separator: "\n")
   guard !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
     return nil
   }

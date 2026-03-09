@@ -15,7 +15,7 @@ let sagaVersion: String = {
 let docOrder = ["index", "Installation", "GettingStarted", "Architecture", "AdvancedUsage"]
 
 /// Maps symbol names (e.g. "Writer") to the doc articles that mention them.
-var symbolMentions: [String: [(title: String, url: String)]] = [:]
+nonisolated(unsafe) var symbolMentions: [String: [(title: String, url: String)]] = [:]
 
 func docSorting(_ a: Item<DocMetadata>, _ b: Item<DocMetadata>) -> Bool {
   let aIndex = docOrder.firstIndex(of: a.filenameWithoutExtension) ?? 999

@@ -174,6 +174,6 @@ func apiSidebar(currentSlug: String, allItems: [AnyItem]) -> Node {
           }
         },
       ]
-    }.flatMap { $0 }
+    }.flatMap(\.self)
   }
 }

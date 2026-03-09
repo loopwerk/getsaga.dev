@@ -33,4 +33,4 @@ clean:
   rm -rf deploy .build/symbolgraph content/docs
 
 format:
-  swiftformat -swift-version 5 .
+  swiftformat -swift-version 6 .

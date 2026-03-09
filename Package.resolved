@@ -1,4 +1,5 @@
 {
+  "originHash" : "05279eb6e4714e52f53710e36f672d738847e01a0cea0176ae8d4f3c5fafe389",
   "pins" : [
     {
       "identity" : "bonsai",
@@ -16,15 +17,6 @@
       "state" : {
         "revision" : "a4c1872d36036fe4ade4b1cadb268603e89e25f0",
         "version" : "3.6.0"
-      }
-    },
-    {
-      "identity" : "lrucache",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nicklockwood/LRUCache.git",
-      "state" : {
-        "revision" : "cb5b2bd0da83ad29c0bec762d39f41c8ad0eaf3e",
-        "version" : "1.2.1"
       }
     },
     {
@@ -59,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/Saga",
       "state" : {
-        "revision" : "54d64b2b9d5cc8af507a473877672d32d28a35bf",
-        "version" : "2.18.4"
+        "revision" : "11b0d71c6dff3a7ae4b390586e03a8a4613d41d6",
+        "version" : "2.18.8"
       }
     },
     {
@@ -68,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaParsleyMarkdownReader",
       "state" : {
-        "revision" : "5a9fa57a5b123afa4acdb0800e348aef549bceba",
-        "version" : "1.1.0"
+        "revision" : "479229014d96435cd289ba478de90d81ee1557e9",
+        "version" : "1.2.0"
       }
     },
     {
@@ -77,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaSwimRenderer",
       "state" : {
-        "revision" : "3ae2675d1a7feedb92b72796198c74956e5671f6",
-        "version" : "1.0.1"
+        "revision" : "feab8b81d1adca3abe98724d3e001f8c0d8c742f",
+        "version" : "1.1.1"
       }
     },
     {
@@ -86,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaUtils",
       "state" : {
-        "revision" : "bc11d5160ad541dbd237dbef248682f54de07d36",
-        "version" : "1.2.0"
+        "revision" : "2a2fa274c5799ca96d6e6ff1bb8fc65c693d7c96",
+        "version" : "1.2.2"
       }
     },
     {
@@ -96,7 +88,7 @@
       "location" : "https://github.com/loopwerk/Sigil",
       "state" : {
         "branch" : "main",
-        "revision" : "1d0ced21bcb2746716dc3c1a707240257f1b974c"
+        "revision" : "03d4215e7ad2d89b093183aa27be9c26bf2f06cd"
       }
     },
     {
@@ -122,17 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "810496cf121e525d660cd0ea89a758740476b85f",
-        "version" : "1.5.1"
-      }
-    },
-    {
-      "identity" : "swift-atomics",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-atomics.git",
-      "state" : {
-        "revision" : "b601256eab081c0f92f059e12818ac1d4f178ff7",
-        "version" : "1.3.0"
+        "revision" : "f70225981241859eb4aa1a18a75531d26637c8cc",
+        "version" : "1.4.0"
       }
     },
     {
@@ -167,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "d86f244ed497d48012782e2f59c985a55e77b3f5",
-        "version" : "2.11.3"
+        "revision" : "dba183c96b2da4e4b80bb31b1e2e59cb9542b8fc",
+        "version" : "2.13.0"
       }
     },
     {
@@ -190,5 +173,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
