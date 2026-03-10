@@ -197,7 +197,7 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
     if trimmed.hasPrefix("- Returns:") {
       let desc = String(trimmed.dropFirst("- Returns:".count)).trimmingCharacters(in: .whitespaces)
       output.append("<h2>Return Value</h2>")
-      output.append("<p>\(inlineMarkdown(desc))</p>")
+      output.append(inlineMarkdown(desc))
       i += 1
       continue
     }

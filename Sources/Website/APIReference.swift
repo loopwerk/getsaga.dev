@@ -345,8 +345,8 @@ func renderDocComment(symbol: SymbolGraph.Symbol) -> String? {
     return nil
   }
 
-  var text = docComment.lines.map(\.text).joined(separator: "\n")
-  guard !text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
+  var text = docComment.lines.map(\.text).joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+  guard !text.isEmpty else {
     return nil
   }
 

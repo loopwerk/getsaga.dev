@@ -14,6 +14,9 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String) -> Node {
           a(class: "sidebar-link\(doc.url == currentUrl ? " sidebar-link-active" : "")", href: doc.url) { doc.title }
         }
       }
+      li {
+        a(class: "sidebar-link\(currentUrl == "/docs/releasenotes/" ? " sidebar-link-active" : "")", href: "/docs/releasenotes/2.x/") { "Release Notes" }
+      }
     }
   }
 }

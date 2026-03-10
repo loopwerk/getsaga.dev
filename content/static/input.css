@@ -44,7 +44,7 @@ body .background {
 }
 
 .doc-sidebar {
-  @apply md:sticky md:top-20 md:self-start md:pt-2 md:max-h-[calc(100vh-5rem)] md:overflow-y-auto;
+  @apply md:sticky md:top-20 md:self-start md:pt-2 md:max-h-[calc(100vh-5rem)] md:overflow-y-auto md:overscroll-contain;
 }
 
 .sidebar-link {
@@ -63,24 +63,18 @@ body .background {
 
 /* Member items (DocC-style) */
 .member-item {
-  @apply py-4;
+  @apply pb-6;
 }
 
-.member-method,
-.member-type\.method,
-.member-subscript,
-.member-type\.subscript {
-  @apply border-b border-zinc-800;
+.doc-content .member-doc h2 {
+  @apply mt-4 text-lg;
 }
 
-.member-method:has(+ h2),
-.member-method:last-child,
-.member-type\.method:has(+ h2),
-.member-type\.method:last-child,
-.member-subscript:has(+ h2),
-.member-subscript:last-child,
-.member-type\.subscript:has(+ h2),
-.member-type\.subscript:last-child {
+.member-method, .member-init {
+  @apply border-b pb-6 mb-6 border-zinc-800;
+}
+
+.member-method:not(:has(~ .member-method)), .member-init:not(:has(~ .member-init)) {
   @apply border-b-0;
 }
 
@@ -99,24 +93,31 @@ body .background {
 }
 
 .doc-content h2 {
-  @apply text-2xl font-bold tracking-tight mt-12 mb-4 pt-6 text-zinc-200;
-  @apply border-t border-zinc-800;
-}
-
-.docs .doc-content h2:first-of-type {
-  @apply border-t-0 pt-0 mt-0;
+  @apply text-2xl font-bold tracking-tight text-zinc-200 mt-12 mb-4;
 }
 
 .doc-content h3 {
   @apply text-lg font-bold mt-8 mb-3 text-zinc-200;
 }
 
+.release-notes h2 {
+  @apply text-lg mt-6;
+}
+
 .doc-content p {
   @apply text-base text-zinc-400 leading-relaxed mb-5;
 }
 
+.doc-content p:last-child {
+  @apply mb-0;
+}
+
 pre {
   @apply overflow-x-auto p-6 bg-zinc-900 border border-zinc-800 rounded-xl mb-6;
+}
+
+pre:last-child {
+  @apply mb-0;
 }
 
 pre code {

@@ -49,10 +49,21 @@ try await saga
     ]
   )
 
+  // Release notes
+  .register(
+    metadata: ReleaseMetadata.self,
+    fetch: { try await fetchReleases() },
+    itemProcessor: swiftSoupProcessor(processExternalLinks),
+    writers: [
+      .partitionedWriter(swim(renderReleaseNotes), output: "docs/releasenotes/[key].x/index.html", partitioner: {
+        Dictionary(grouping: $0, by: { $0.metadata.major })
+      }),
+    ]
+  )
+
   .createPage("index.html", using: swim(renderHomePage))
   .createPage("404.html", using: swim(render404Page))
   .createPage("search/index.html", using: swim(renderSearch))
-
   // Minify all HTML output (prod only)
   .postProcess { html, _ in
     guard !isDev else { return html }
