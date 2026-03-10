@@ -59,6 +59,18 @@ The doc ordering is hardcoded in `Utils.swift`: `["index", "Installation", "Gett
 - Templates use [Swim](https://github.com/robb/Swim) (imported as `HTML`) for type-safe HTML with Tailwind CSS classes
 - CSS is Tailwind v4, configured via `content/static/input.css`
 
+## Linux Compatibility
+
+This project is deployed on Linux (via Docker). All Swift code must compile and run on Linux. Key things to watch for:
+
+- Foundation networking types (`URLRequest`, `URLSession`, etc.) require `import FoundationNetworking` on Linux. Use a conditional import:
+  ```swift
+  #if canImport(FoundationNetworking)
+    import FoundationNetworking
+  #endif
+  ```
+- Avoid Apple-only APIs (e.g., `Combine`, `SwiftUI`, Objective-C runtime features). Stick to cross-platform Swift and Foundation.
+
 ## Deployment
 
 Multi-stage Docker build: Swift 6.0 builder → nginx:alpine serving `deploy/`. See `Dockerfile` and `nginx.conf`.

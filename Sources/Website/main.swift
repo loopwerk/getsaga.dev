@@ -64,6 +64,7 @@ try await saga
   .createPage("index.html", using: swim(renderHomePage))
   .createPage("404.html", using: swim(render404Page))
   .createPage("search/index.html", using: swim(renderSearch))
+
   // Minify all HTML output (prod only)
   .postProcess { html, _ in
     guard !isDev else { return html }
