@@ -101,6 +101,12 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
   ]
 }
 
+func renderReleaseNotesRedirect(context: PageRenderingContext) -> String {
+  let major = context.allItems.compactMap { $0 as? Item<ReleaseMetadata> }.sorted { $0.date > $1.date }.first?.metadata.major ?? 2
+  let url = "/docs/releasenotes/\(major).x/"
+  return #"<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=\#(url)"><link rel="canonical" href="\#(url)"></head><body></body></html>"#
+}
+
 func render404Page(context: PageRenderingContext) -> Node {
   layout(title: "Page not found", activePage: .other) {
     section(class: "mx-auto max-w-5xl px-8 pt-32 pb-24 text-center") {
