@@ -2,7 +2,7 @@ import Foundation
 import HTML
 import Moon
 import Parsley
-import PathKit
+import SagaPathKit
 import Saga
 import Sigil
 import SymbolKit
@@ -173,7 +173,7 @@ func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [AP
 
 // MARK: - Symbol graph loading
 
-func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
+func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
   let path = rootPath + ".build" + "symbolgraph" + "Saga.symbols.json"
 
   guard path.exists else {
@@ -250,7 +250,7 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
     let item = Item<APIMetadata>(
       title: symbol.names.title,
       body: docComment ?? "",
-      relativeDestination: PathKit.Path("api/\(slug)/index.html"),
+      relativeDestination: Path("api/\(slug)/index.html"),
       metadata: metadata
     )
 
@@ -269,7 +269,7 @@ func loadSymbolGraph(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
 
 // MARK: - Extension symbol graph loading
 
-func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetadata>] {
+func loadExtensionSymbolGraphs(rootPath: Path) throws -> [Item<APIMetadata>] {
   let dir = rootPath + ".build" + "symbolgraph"
   guard dir.exists else { return [] }
 
@@ -332,7 +332,7 @@ func loadExtensionSymbolGraphs(rootPath: PathKit.Path) throws -> [Item<APIMetada
     return Item<APIMetadata>(
       title: typeName,
       body: "",
-      relativeDestination: PathKit.Path("api/\(slug)/index.html"),
+      relativeDestination: Path("api/\(slug)/index.html"),
       metadata: metadata
     )
   }

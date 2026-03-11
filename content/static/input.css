@@ -104,6 +104,22 @@ body .background {
   @apply text-lg mt-6;
 }
 
+.release-notes .breaking-changes {
+  @apply bg-red-950/30 border border-red-900/50 rounded-lg px-5 py-4 mt-6;
+}
+
+.release-notes .breaking-changes h2 {
+  @apply mt-0;
+}
+
+.release-notes .breaking-changes * {
+  @apply text-zinc-200;
+}
+
+.release-notes .breaking-changes ul:last-child {
+  @apply mb-0;
+}
+
 .doc-content p {
   @apply text-base text-zinc-400 leading-relaxed mb-5;
 }

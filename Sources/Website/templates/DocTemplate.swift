@@ -1,6 +1,6 @@
 import Foundation
 import HTML
-import PathKit
+import SagaPathKit
 import Saga
 
 // MARK: - Doc sidebar

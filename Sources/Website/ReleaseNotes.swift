@@ -3,7 +3,7 @@ import Foundation
   import FoundationNetworking
 #endif
 import Parsley
-import PathKit
+import SagaPathKit
 import Saga
 
 struct ReleaseMetadata: Metadata {
@@ -27,10 +27,7 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
   let cachePath = Path(".build/releases-cache.json")
 
   // Use cached data if available
-  if cachePath.exists,
-     let attributes = try? FileManager.default.attributesOfItem(atPath: cachePath.string),
-     let modified = attributes[.modificationDate] as? Date
-  {
+  if cachePath.exists {
     let data: Data = try cachePath.read()
     let items = try JSONDecoder().decode([CachedRelease].self, from: data)
     return items.map(\.toItem)
@@ -65,7 +62,8 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
       let title = release.name ?? version
 
       let markdownBody = release.body ?? ""
-      let htmlBody = (try? Parsley.html(markdownBody, options: [.unsafe, .smartQuotes])) ?? markdownBody
+      var htmlBody = (try? Parsley.html(markdownBody, options: [.unsafe, .smartQuotes])) ?? markdownBody
+      htmlBody = wrapBreakingChanges(htmlBody)
 
       let metadata = ReleaseMetadata(
         tagName: version,
@@ -124,4 +122,19 @@ private struct CachedRelease: Codable {
       metadata: metadata
     )
   }
+}
+
+/// Wraps "BREAKING CHANGES" sections in a styled container.
+func wrapBreakingChanges(_ html: String) -> String {
+  guard let regex = try? NSRegularExpression(
+    pattern: #"(<h2>BREAKING CHANGES</h2>)([\s\S]*?)(?=<h2>|$)"#,
+    options: []
+  ) else { return html }
+
+  let range = NSRange(html.startIndex..., in: html)
+  return regex.stringByReplacingMatches(
+    in: html,
+    range: range,
+    withTemplate: #"<div class="breaking-changes">$1$2</div>"#
+  )
 }

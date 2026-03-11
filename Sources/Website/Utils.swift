@@ -1,6 +1,6 @@
 import Foundation
 import Parsley
-import PathKit
+import SagaPathKit
 import Saga
 
 let sagaVersion: String = {
