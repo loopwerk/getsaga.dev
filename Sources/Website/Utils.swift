@@ -4,12 +4,17 @@ import SagaPathKit
 import Saga
 
 let sagaVersion: String = {
-  let data = try! Data(contentsOf: URL(fileURLWithPath: "Package.resolved"))
-  let resolved = try! JSONSerialization.jsonObject(with: data) as! [String: Any]
-  let pins = resolved["pins"] as! [[String: Any]]
-  let saga = pins.first { $0["identity"] as? String == "saga" }!
-  let state = saga["state"] as! [String: Any]
-  return state["version"] as! String
+  guard
+    let data = try? Data(contentsOf: URL(fileURLWithPath: "Package.resolved")),
+    let resolved = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+    let pins = resolved["pins"] as? [[String: Any]],
+    let saga = pins.first(where: { $0["identity"] as? String == "saga" }),
+    let state = saga["state"] as? [String: Any],
+    let version = state["version"] as? String
+  else {
+    return "local"
+  }
+  return version
 }()
 
 let docOrder = ["index", "Installation", "GettingStarted", "Architecture", "AdvancedUsage"]
