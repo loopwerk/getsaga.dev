@@ -11,7 +11,7 @@ compile:
   swift build --product Website -j 2
 
 # Full build
-build: clean resolve copy-docs symbol-graph
+build: copy-docs symbol-graph
   swift run
 
 # Copy DocC guide markdown files into content/docs/
