@@ -39,7 +39,7 @@ func renderAPIIndex(context: ItemsRenderingContext<APIMetadata>) -> Node {
 
       main(class: "doc-content min-w-0") {
         h1 { "Saga \(sagaVersion) API Reference" }
-        p { "Complete reference for all public types, protocols, and functions in the Saga module. Browse the symbols using the sidebar." }
+        p(class: "mt-8") { "Complete reference for all public types, protocols, and functions in the Saga module. Browse the symbols using the sidebar." }
         a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white! transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/releasenotes/") {
           "Releases notes"
         }
@@ -97,8 +97,16 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
 
         renderMemberGroups(meta.members)
 
-        if !meta.conformances.isEmpty || !meta.conformingTypes.isEmpty {
+        if !meta.inheritsFrom.isEmpty || !meta.inheritedBy.isEmpty || !meta.conformances.isEmpty || !meta.conformingTypes.isEmpty {
           h2 { "Relationships" }
+          if !meta.inheritsFrom.isEmpty {
+            h3 { "Inherits From" }
+            p { conformanceList(meta.inheritsFrom) }
+          }
+          if !meta.inheritedBy.isEmpty {
+            h3 { "Inherited By" }
+            p { conformanceList(meta.inheritedBy) }
+          }
           if !meta.conformances.isEmpty {
             h3 { meta.kind == .protocol ? "Inherits From" : "Conforms To" }
             p { conformanceList(meta.conformances) }

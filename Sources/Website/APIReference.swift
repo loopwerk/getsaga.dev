@@ -104,6 +104,8 @@ struct APIMetadata: Metadata {
   let isDeprecated: Bool
   let deprecationMessage: String?
   let members: [APIMember]
+  let inheritsFrom: [Conformance]
+  let inheritedBy: [Conformance]
   let conformances: [Conformance]
   let conformingTypes: [Conformance]
   let mentionedIn: [DocMention]
@@ -140,6 +142,25 @@ func collectConformances(graph: SymbolGraph) -> [String: [Conformance]] {
         Conformance(name: targetSymbol.names.title, url: "/api/\(slug)/")
       )
     } else if let fallback = rel.targetFallback, !fallback.hasSuffix("Metatype") {
+      result[rel.source, default: []].append(
+        Conformance(name: fallback, url: nil)
+      )
+    }
+  }
+  return result
+}
+
+/// Collects inheritance relationships from a symbol graph, keyed by source symbol ID.
+func collectInheritance(graph: SymbolGraph) -> [String: [Conformance]] {
+  let symbols = graph.symbols
+  var result: [String: [Conformance]] = [:]
+  for rel in graph.relationships where rel.kind == .inheritsFrom {
+    if let targetSymbol = symbols[rel.target] {
+      let slug = targetSymbol.names.title.lowercased()
+      result[rel.source, default: []].append(
+        Conformance(name: targetSymbol.names.title, url: "/api/\(slug)/")
+      )
+    } else if let fallback = rel.targetFallback {
       result[rel.source, default: []].append(
         Conformance(name: fallback, url: nil)
       )
@@ -187,6 +208,7 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
   let symbols = graph.symbols
   let membersByParent = groupMembersByParent(graph: graph)
   let conformancesBySymbol = collectConformances(graph: graph)
+  let inheritanceBySymbol = collectInheritance(graph: graph)
 
   // Find top-level symbols (public, not members of other symbols)
   let memberTargets = Set(
@@ -201,6 +223,17 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
     if let sourceSymbol = symbols[rel.source], symbols[rel.target] != nil {
       let slug = sourceSymbol.names.title.lowercased()
       conformingTypesBySymbol[rel.target, default: []].append(
+        Conformance(name: sourceSymbol.names.title, url: "/api/\(slug)/")
+      )
+    }
+  }
+
+  // Collect inherited-by types (reverse of inheritsFrom) for classes
+  var inheritedBySymbol: [String: [Conformance]] = [:]
+  for rel in graph.relationships where rel.kind == .inheritsFrom {
+    if let sourceSymbol = symbols[rel.source], symbols[rel.target] != nil {
+      let slug = sourceSymbol.names.title.lowercased()
+      inheritedBySymbol[rel.target, default: []].append(
         Conformance(name: sourceSymbol.names.title, url: "/api/\(slug)/")
       )
     }
@@ -228,6 +261,8 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
     let docComment = renderDocComment(symbol: symbol)
     let (isDeprecated, deprecationMessage) = checkDeprecation(symbol: symbol)
     let members = resolveMembers(ids: membersByParent[id] ?? [], symbols: symbols)
+    let inheritsFrom = (inheritanceBySymbol[id] ?? []).sorted { $0.name < $1.name }
+    let inheritedBy = (inheritedBySymbol[id] ?? []).sorted { $0.name < $1.name }
     let conformances = (conformancesBySymbol[id] ?? []).sorted { $0.name < $1.name }
     let conformingTypes = (conformingTypesBySymbol[id] ?? []).sorted { $0.name < $1.name }
 
@@ -240,6 +275,8 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
       isDeprecated: isDeprecated,
       deprecationMessage: deprecationMessage,
       members: members,
+      inheritsFrom: inheritsFrom,
+      inheritedBy: inheritedBy,
       conformances: conformances,
       conformingTypes: conformingTypes,
       mentionedIn: mentions
@@ -324,6 +361,8 @@ func loadExtensionSymbolGraphs(rootPath: Path) throws -> [Item<APIMetadata>] {
       isDeprecated: false,
       deprecationMessage: nil,
       members: sortedMembers,
+      inheritsFrom: [],
+      inheritedBy: [],
       conformances: conformances,
       conformingTypes: [],
       mentionedIn: mentions
@@ -350,7 +389,7 @@ func renderDocComment(symbol: SymbolGraph.Symbol) -> String? {
     return nil
   }
 
-  text = rewriteMarkdown(markdown: text, docTitles: [:])
+  text = rewriteMarkdown(markdown: text, docTitles: [:], docUrls: [:])
 
   guard let html = try? Parsley.html(text, options: [.unsafe, .smartQuotes]) else {
     return nil

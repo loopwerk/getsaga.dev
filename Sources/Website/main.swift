@@ -55,15 +55,14 @@ try await saga
     fetch: { try await fetchReleases() },
     itemProcessor: swiftSoupProcessor(processExternalLinks),
     writers: [
-      .partitionedWriter(swim(renderReleaseNotes), output: "docs/releasenotes/[key].x/index.html", partitioner: {
-        Dictionary(grouping: $0, by: { $0.metadata.major })
-      }),
+      .groupedWriter(swim(renderReleaseNotes), by: \.metadata.major, output: "docs/releasenotes/[key].x/index.html"),
     ]
   )
 
   .createPage("index.html", using: swim(renderHomePage))
   .createPage("404.html", using: swim(render404Page))
   .createPage("search/index.html", using: swim(renderSearch))
+  .createPage("docs/guides/index.html", using: swim(renderGuidesIndex))
   .createPage("docs/releasenotes/index.html", using: renderReleaseNotesRedirect)
 
   // Minify all HTML output (prod only)

@@ -3,7 +3,6 @@ import Foundation
   import FoundationNetworking
 #endif
 import Parsley
-import SagaPathKit
 import Saga
 
 struct ReleaseMetadata: Metadata {
@@ -24,15 +23,6 @@ private struct GitHubRelease: Decodable {
 }
 
 func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
-  let cachePath = Path(".build/releases-cache.json")
-
-  // Use cached data if available
-  if cachePath.exists {
-    let data: Data = try cachePath.read()
-    let items = try JSONDecoder().decode([CachedRelease].self, from: data)
-    return items.map(\.toItem)
-  }
-
   var allReleases: [GitHubRelease] = []
   var page = 1
 
@@ -51,7 +41,7 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
   let dateFormatter = ISO8601DateFormatter()
   dateFormatter.formatOptions = [.withInternetDateTime]
 
-  let items: [Item<ReleaseMetadata>] = allReleases
+  return allReleases
     .filter { !$0.draft }
     .compactMap { release in
       let version = release.tag_name
@@ -79,49 +69,6 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
         metadata: metadata
       )
     }
-
-  // Cache the results
-  try? FileManager.default.createDirectory(atPath: Path(".build").string, withIntermediateDirectories: true)
-  let cached = items.map { CachedRelease(from: $0) }
-  let cacheData = try JSONEncoder().encode(cached)
-  try? cachePath.write(cacheData)
-
-  return items
-}
-
-// MARK: - Cache serialization
-
-private struct CachedRelease: Codable {
-  let title: String
-  let tagName: String
-  let major: Int
-  let htmlBody: String
-  let publishedAt: Date
-  let htmlUrl: String
-
-  init(from item: Item<ReleaseMetadata>) {
-    title = item.title
-    tagName = item.metadata.tagName
-    major = item.metadata.major
-    htmlBody = item.body
-    publishedAt = item.metadata.publishedAt
-    htmlUrl = item.metadata.htmlUrl
-  }
-
-  var toItem: Item<ReleaseMetadata> {
-    let metadata = ReleaseMetadata(
-      tagName: tagName,
-      major: major,
-      publishedAt: publishedAt,
-      htmlUrl: htmlUrl
-    )
-    return Item<ReleaseMetadata>(
-      title: title,
-      body: htmlBody,
-      date: publishedAt,
-      metadata: metadata
-    )
-  }
 }
 
 /// Wraps "BREAKING CHANGES" sections in a styled container.

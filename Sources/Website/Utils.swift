@@ -25,7 +25,10 @@ nonisolated(unsafe) var symbolMentions: [String: [(title: String, url: String)]]
 func docSorting(_ a: Item<DocMetadata>, _ b: Item<DocMetadata>) -> Bool {
   let aIndex = docOrder.firstIndex(of: a.filenameWithoutExtension) ?? 999
   let bIndex = docOrder.firstIndex(of: b.filenameWithoutExtension) ?? 999
-  return aIndex < bIndex
+  if aIndex != bIndex {
+    return aIndex < bIndex
+  }
+  return a.title.localizedCaseInsensitiveCompare(b.title) == .orderedAscending
 }
 
 /// Bolds the first word in blockquotes that ends with a colon (e.g. "Note:", "Warning:").
@@ -56,13 +59,17 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
     return
   }
 
-  let docs = try docsPath.children().filter { $0.extension == "md" }
+  let docs = try docsPath.recursiveChildren().filter { $0.extension == "md" }
 
-  // Build a mapping of filename (without extension) → title from the first heading
+  // Build a mapping of filename (without extension) → (title, url)
   var docTitles: [String: String] = [:]
+  var docUrls: [String: String] = [:]
   for doc in docs {
     let markdown: String = try doc.read()
     let filename = doc.lastComponentWithoutExtension
+    let relativePath = doc.parent().string.replacingOccurrences(of: docsPath.string, with: "")
+    let urlPath = "/docs\(relativePath)/\(filename.lowercased())/"
+    docUrls[filename] = urlPath
     if let firstLine = markdown.split(separator: "\n", maxSplits: 1).first,
        firstLine.hasPrefix("# ")
     {
@@ -75,13 +82,13 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
 
   for doc in docs {
     let markdown: String = try doc.read()
-    let rewritten = rewriteMarkdown(markdown: markdown, docTitles: docTitles)
+    let rewritten = rewriteMarkdown(markdown: markdown, docTitles: docTitles, docUrls: docUrls)
     try doc.write(rewritten)
 
     // Collect symbol mentions for "Mentioned in" on API pages
     let filename = doc.lastComponentWithoutExtension
     let title = docTitles[filename] ?? filename
-    let url = "/docs/\(filename.lowercased())/"
+    let url = docUrls[filename] ?? "/docs/\(filename.lowercased())/"
     let mentionedSymbols = extractSymbolMentions(markdown: markdown)
     for symbol in mentionedSymbols {
       symbolMentions[symbol, default: []].append((title: title, url: url))
@@ -102,7 +109,7 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
 
 /// We get Markdown with DocC syntax, that normal markdown parsers don't understand,
 /// so we rewrite the markdown to normal syntax.
-func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
+func rewriteMarkdown(markdown: String, docTitles: [String: String], docUrls: [String: String]) -> String {
   var result = markdown
 
   // Rewrite ``Symbol`` or ``Parent/member`` → linked code span
@@ -137,7 +144,8 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
     {
       let filename = String(result[nameRange])
       let title = docTitles[filename] ?? filename
-      result.replaceSubrange(fullRange, with: "[\(title)](/docs/\(filename.lowercased())/)")
+      let url = docUrls[filename] ?? "/docs/\(filename.lowercased())/"
+      result.replaceSubrange(fullRange, with: "[\(title)](\(url))")
     }
   }
 
@@ -149,7 +157,8 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String]) -> String {
        let nameRange = Range(match.range(at: 2), in: result)
     {
       let filename = String(result[nameRange])
-      result.replaceSubrange(outerRange, with: "(/docs/\(filename.lowercased())/)")
+      let url = docUrls[filename] ?? "/docs/\(filename.lowercased())/"
+      result.replaceSubrange(outerRange, with: "(\(url))")
     }
   }
 
