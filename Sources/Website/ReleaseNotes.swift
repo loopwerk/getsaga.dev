@@ -4,6 +4,7 @@ import Foundation
 #endif
 import Parsley
 import Saga
+import SwiftSoup
 
 struct ReleaseMetadata: Metadata {
   let tagName: String
@@ -51,10 +52,6 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
       let publishedAt = dateFormatter.date(from: release.published_at) ?? Date()
       let title = release.name ?? version
 
-      let markdownBody = release.body ?? ""
-      var htmlBody = (try? Parsley.html(markdownBody, options: [.unsafe, .smartQuotes])) ?? markdownBody
-      htmlBody = wrapBreakingChanges(htmlBody)
-
       let metadata = ReleaseMetadata(
         tagName: version,
         major: major,
@@ -64,11 +61,32 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
 
       return Item<ReleaseMetadata>(
         title: title,
-        body: htmlBody,
+        body: release.body ?? "",
         date: publishedAt,
         metadata: metadata
       )
     }
+}
+
+func processReleaseNotes(item: Item<ReleaseMetadata>) {
+  var html = (try? Parsley.html(item.body, options: [.unsafe, .smartQuotes, .hardBreaks])) ?? item.body
+  html = wrapBreakingChanges(html)
+  item.body = html
+}
+
+/// Splits list items on `<br>`, keeping the first part as-is
+/// and wrapping the remaining parts in a styled div.
+func wrapListItemDescriptions(_ doc: SwiftSoup.Document, item: Item<ReleaseMetadata>) throws {
+  let lis = try doc.select("li")
+
+  for li in lis {
+    let innerHtml = try li.html()
+    let parts = innerHtml.components(separatedBy: "<br />")
+    guard parts.count > 1 else { continue }
+    let first = parts[0]
+    let rest = parts.dropFirst().joined(separator: "<br />")
+    try li.html(first + #"<div class="text-sm text-zinc-500 mt-2">"# + rest + "</div>")
+  }
 }
 
 /// Wraps "BREAKING CHANGES" sections in a styled container.

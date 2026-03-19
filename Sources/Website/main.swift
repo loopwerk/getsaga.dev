@@ -53,7 +53,7 @@ try await saga
   .register(
     metadata: ReleaseMetadata.self,
     fetch: { try await fetchReleases() },
-    itemProcessor: swiftSoupProcessor(processExternalLinks),
+    itemProcessor: sequence(processReleaseNotes, swiftSoupProcessor(wrapListItemDescriptions, processExternalLinks)),
     writers: [
       .groupedWriter(swim(renderReleaseNotes), by: \.metadata.major, output: "docs/releasenotes/[key].x/index.html"),
     ]
