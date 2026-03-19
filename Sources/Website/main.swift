@@ -26,7 +26,7 @@ try await saga
     folder: "docs",
     metadata: DocMetadata.self,
     readers: [.parsleyMarkdownReader],
-    itemProcessor: Saga.sequence(
+    itemProcessor: sequence(
       processDocItem,
       syntaxHighlight,
       boldBlockquoteKeywords,
