@@ -26,7 +26,7 @@ try await saga
     folder: "docs",
     metadata: DocMetadata.self,
     readers: [.parsleyMarkdownReader],
-    itemProcessor: sequence(
+    itemProcessor: Saga.sequence(
       processDocItem,
       syntaxHighlight,
       boldBlockquoteKeywords,
@@ -67,7 +67,7 @@ try await saga
 
   // Minify all HTML output (prod only)
   .postProcess { html, _ in
-    guard !isDev else { return html }
+    guard !Saga.isDev else { return html }
     return Bonsai.minifyHTML(html)
   }
 

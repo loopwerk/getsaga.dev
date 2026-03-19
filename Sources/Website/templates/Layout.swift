@@ -20,8 +20,8 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         meta(charset: "UTF-8")
         meta(content: "width=device-width, initial-scale=1.0", name: "viewport")
         title { "Saga - \(pageTitle)" }
-        link(href: hashed("/static/output.css"), rel: "stylesheet")
-        link(href: hashed("/static/prism.css"), rel: "stylesheet")
+        link(href: Saga.hashed("/static/output.css"), rel: "stylesheet")
+        link(href: Saga.hashed("/static/prism.css"), rel: "stylesheet")
         link(href: "/static/favicon-96x96.png", rel: "icon", sizes: "96x96", type: "image/png")
         link(href: "/static/favicon.svg", rel: "icon", type: "image/svg+xml")
         link(href: "/static/favicon.ico", rel: "shortcut icon")
@@ -29,7 +29,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         meta(content: "Saga", name: "apple-mobile-web-app-title")
         meta(content: "#09090b", name: "theme-color")
         link(href: "/static/site.webmanifest", rel: "manifest")
-        if !isDev {
+        if !Saga.isDev {
           script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710"])
         }
       }
@@ -122,7 +122,7 @@ func render404Page(context: PageRenderingContext) -> Node {
 
 func renderSearch(context: PageRenderingContext) -> Node {
   layout(title: "Search", activePage: .other) {
-    script(src: hashed("/static/prism.js"))
+    script(src: Saga.hashed("/static/prism.js"))
     script {
       Node.raw(
         """
