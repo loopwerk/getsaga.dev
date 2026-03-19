@@ -18,14 +18,14 @@ enum SymbolKind: String, Codable, CaseIterable {
   case `typealias`
   case `enum`
   case `extension`
-  case typeMethod = "type.method"
   case `init`
-  case typeProperty = "type.property"
   case property
   case method
+  case typeProperty = "type.property"
+  case typeMethod = "type.method"
   case enumCase = "enum.case"
-  case typeSubscript = "type.subscript"
   case `subscript`
+  case typeSubscript = "type.subscript"
   case `associatedtype`
 
   var displayName: String {

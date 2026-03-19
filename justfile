@@ -1,5 +1,5 @@
 # Development: watch and rebuild on changes
-run: clean copy-docs symbol-graph
+run: clean resolve copy-docs symbol-graph
   saga dev --ignore output.css --ignore "content/docs/*"
 
 # Resolve SPM dependencies
@@ -31,7 +31,7 @@ symbol-graph:
 
 # Clean build artifacts
 clean:
-  rm -rf deploy .build/symbolgraph content/docs
+  rm -rf deploy .build/symbolgraph .build/checkouts/Saga content/docs
 
 format:
   swiftformat -swift-version 6 .
