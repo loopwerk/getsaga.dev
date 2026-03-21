@@ -186,10 +186,6 @@ pre:has(> code[class*="language-shell-session"])::after {
   @apply bg-zinc-900 border border-zinc-800 border-l-3 border-l-accent rounded-lg px-5 py-4 mb-6 text-base text-zinc-400 leading-relaxed;
 }
 
-.doc-content blockquote em {
-  @apply block text-zinc-200 capitalize not-italic font-bold;
-}
-
 .doc-content blockquote p:last-child {
   @apply mb-0;
 }

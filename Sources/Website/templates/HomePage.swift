@@ -168,7 +168,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           
           // Minify all HTML output (prod only)
           .postProcess { html, _ in
-            guard !isDev else { return html }
+            guard !Saga.isDev else { return html }
             return Bonsai.minifyHTML(html)
           }
           
