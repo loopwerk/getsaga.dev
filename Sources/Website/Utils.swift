@@ -17,7 +17,7 @@ let sagaVersion: String = {
   return version
 }()
 
-let docOrder = ["index", "Installation", "GettingStarted", "Architecture", "AdvancedUsage"]
+let docOrder = ["index", "Installation", "GettingStarted", "Architecture", "AdvancedUsage", "Migrate"]
 
 /// Maps symbol names (e.g. "Writer") to the doc articles that mention them.
 nonisolated(unsafe) var symbolMentions: [String: [(title: String, url: String)]] = [:]

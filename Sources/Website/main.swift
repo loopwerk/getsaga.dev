@@ -6,21 +6,26 @@ import SagaSwimRenderer
 import SagaUtils
 import SwiftTailwind
 
-/// Compile Tailwind CSS
-let tailwind = SwiftTailwind(version: "4.2.1")
-try await tailwind.run(
-  input: "content/static/input.css",
-  output: "content/static/output.css",
-  options: .minify
-)
-
 let saga = try Saga(input: "content", output: "deploy")
+let tailwind = SwiftTailwind(version: "4.2.1")
 
 // Read the markdown files in content/docs/, and overwrite the content
 // with a rewritten, improved version.
 try rewriteMarkdownDocs(inputPath: saga.inputPath)
 
 try await saga
+  .ignore("output.css")
+  .ignore("content/docs/*")
+
+  /// Compile Tailwind CSS
+  .beforeRead { _ in
+    try await tailwind.run(
+      input: "content/static/input.css",
+      output: "content/static/output.css",
+      options: .minify
+    )
+  }
+  
   // Guide documentation (from DocC markdown files)
   .register(
     folder: "docs",
@@ -71,16 +76,18 @@ try await saga
     return Bonsai.minifyHTML(html)
   }
 
+  /// Index the site with Pagefind
+  .afterWrite { _ in
+    let pagefind = Process()
+    pagefind.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+    pagefind.arguments = ["pnpm", "pagefind", "--site", "deploy"]
+    pagefind.currentDirectoryURL = URL(fileURLWithPath: saga.rootPath.string)
+    try pagefind.run()
+    pagefind.waitUntilExit()
+    if pagefind.terminationStatus != 0 {
+      print("pagefind failed with exit code \(pagefind.terminationStatus)")
+    }
+  }
+
   // Run everything!
   .run()
-
-/// Index the site with Pagefind
-let pagefind = Process()
-pagefind.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-pagefind.arguments = ["pnpm", "pagefind", "--site", "deploy"]
-pagefind.currentDirectoryURL = URL(fileURLWithPath: saga.rootPath.string)
-try pagefind.run()
-pagefind.waitUntilExit()
-if pagefind.terminationStatus != 0 {
-  print("pagefind failed with exit code \(pagefind.terminationStatus)")
-}
