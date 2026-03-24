@@ -31,6 +31,12 @@ func renderHomePage(context: PageRenderingContext) -> Node {
   return layout(title: "A static site generator, written in Swift", activePage: .home) {
     // Hero with buttons
     section(class: "mx-auto max-w-5xl px-6 pt-32 pb-24 text-center md:px-8") {
+      a(class: "mb-8 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 p-2 text-sm font-medium text-accent transition-colors hover:bg-accent/20", href: "/docs/migrate/") {
+        span(class: "rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white") { "Saga 3" }
+        "See what's new"
+        Node.raw(#"<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>"#)
+      }
+
       img(alt: "logo", class: "mx-auto mb-10 block w-32 md:w-48", src: "/static/saga_ship.svg")
 
       h1(class: "mb-5 text-5xl font-extrabold leading-tight tracking-tight text-zinc-200 md:text-6xl") {
@@ -49,7 +55,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
           "Get Started"
         }
-        a(class: "inline-flex items-center gap-2 rounded-lg border border-zinc-800 px-7 py-3 text-sm font-semibold text-zinc-200 transition-all hover:-translate-y-px hover:border-zinc-600 hover:bg-zinc-900", href: "https://github.com/loopwerk/Saga", target: "_blank") {
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-7 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-zinc-200 hover:shadow-lg", href: "https://github.com/loopwerk/Saga", target: "_blank") {
           "View on GitHub"
         }
       }
@@ -64,11 +70,11 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           div(class: "flex flex-col gap-3") {
             div(class: "flex items-center gap-4") {
               span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-500") { "Homebrew" }
-              code(class: "rounded-md border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-sm") { "brew install loopwerk/tap/saga" }
+              code(class: "rounded-md border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-sm") { "brew install loopwerk/tap/saga" }
             }
             div(class: "flex items-center gap-4") {
               span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-500") { "Mint" }
-              code(class: "rounded-md border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-sm") { "mint install loopwerk/saga-cli" }
+              code(class: "rounded-md border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-sm") { "mint install loopwerk/saga-cli" }
             }
           }
         }
@@ -120,7 +126,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
       div(class: "mx-auto max-w-3xl") {
         Node.raw(Moon.shared.highlightCodeBlocks(in: """
-        <pre><code class="language-swift">struct ArticleMetadata: Metadata {
+        <pre class="code-glow"><code class="language-swift">struct ArticleMetadata: Metadata {
           let tags: [String]
           let summary: String
           var public: Bool = true
@@ -149,7 +155,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
       div(class: "mx-auto max-w-3xl") {
         Node.raw(Moon.shared.highlightCodeBlocks(in: """
-        <pre><code class="language-swift">let saga = try Saga(input: "content", output: "deploy")
+        <pre class="code-glow"><code class="language-swift">let saga = try Saga(input: "content", output: "deploy")
 
         try await saga
           // Guide documentation (from DocC Markdown files)
@@ -197,20 +203,20 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
       }
-      div(class: "mx-auto flex max-w-2xl flex-col gap-8", style: "--card-accent: var(--color-accent)") {
-        growsWithCard(icon: iconLayers, title: "Typed metadata", description: "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently.")
+      div(class: "mx-auto flex max-w-2xl flex-col gap-8") {
+        growsWithCard(icon: iconLayers, color: "#fb94ff", title: "Typed metadata", description: "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently.")
 
-        growsWithCard(icon: iconDatabase, title: "Programmatic content", description: "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. Generate pages from code: landing pages, sitemaps, search indexes, 404 pages. No content file on disk needed.")
+        growsWithCard(icon: iconDatabase, color: "#fad000", title: "Programmatic content", description: "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. Generate pages from code: landing pages, sitemaps, search indexes, 404 pages. No content file on disk needed.")
 
-        growsWithCard(icon: iconGitBranch, title: "Nested processing", description: "Chain processing steps hierarchically to render complex content. Photos in albums in folders? No problem, use Saga to build your photo gallery.")
+        growsWithCard(icon: iconGitBranch, color: "#a5ff90", title: "Nested processing", description: "Chain processing steps hierarchically to render complex content. Photos in albums in folders? No problem, use Saga to build your photo gallery.")
 
-        growsWithCard(icon: iconMap, title: "Tags, feeds, and sitemaps", description: "Generate tag pages, Atom feeds, and XML sitemaps with dedicated writers. Help your visitors and search engines discover your content.")
+        growsWithCard(icon: iconMap, color: "#ff9d00", title: "Tags, feeds, and sitemaps", description: "Generate tag pages, Atom feeds, and XML sitemaps with dedicated writers. Help your visitors and search engines discover your content.")
 
-        growsWithCard(icon: iconGlobe, title: "Internationalization", description: "Build multilingual sites with fully localized URLs, automatic translation linking, and locale-aware sitemaps.")
+        growsWithCard(icon: iconGlobe, color: "#b362ff", title: "Internationalization", description: "Build multilingual sites with fully localized URLs, automatic translation linking, and locale-aware sitemaps.")
 
-        growsWithCard(icon: iconChevrons, title: "Markdown attributes", description: "Add CSS classes, IDs, and custom attributes directly in your Markdown. Style content without leaving your prose.")
+        growsWithCard(icon: iconChevrons, color: "#ff618c", title: "Markdown attributes", description: "Add CSS classes, IDs, and custom attributes directly in your Markdown. Style content without leaving your prose.")
 
-        growsWithCard(icon: iconSliders, title: "Your build, your rules", description: "Pre- and post-build hooks, custom processing steps, HTML transforms: generate images, build a search index, or minify output. If Swift can do it, your build can too.")
+        growsWithCard(icon: iconSliders, color: "#5ce0d8", title: "Your build, your rules", description: "Pre- and post-build hooks, custom processing steps, HTML transforms: generate images, build a search index, or minify output. If Swift can do it, your build can too.")
       }
     }
 
@@ -220,9 +226,9 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Modular by design" }
         p(class: "text-base") { "Compose your site with readers, renderers, and plugins that fit your needs." }
       }
-      div(class: "grid gap-8 md:grid-cols-2 lg:grid-cols-3") {
+      div(class: "code-glow grid gap-8 md:grid-cols-2 lg:grid-cols-3") {
         div {
-          h3(class: "mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400") { "Markdown readers" }
+          h3(class: "mb-5 text-sm font-semibold tracking-widest text-zinc-300") { "Markdown readers" }
           ul(class: "flex list-none flex-col gap-5") {
             pluginLink(name: "SagaParsleyMarkdownReader", url: "https://github.com/loopwerk/SagaParsleyMarkdownReader", detail: "Parsley")
             pluginLink(name: "SagaInkMarkdownReader", url: "https://github.com/loopwerk/SagaInkMarkdownReader", detail: "Ink + Splash")
@@ -230,16 +236,16 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           }
         }
         div {
-          h3(class: "mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400") { "Renderers" }
+          h3(class: "mb-5 text-sm font-semibold tracking-widest text-zinc-300") { "Renderers" }
           ul(class: "flex list-none flex-col gap-5") {
             pluginLink(name: "SagaSwimRenderer", url: "https://github.com/loopwerk/SagaSwimRenderer", detail: "type-safe HTML with Swim")
             pluginLink(name: "SagaStencilRenderer", url: "https://github.com/loopwerk/SagaStencilRenderer", detail: "Stencil templates")
           }
         }
         div {
-          h3(class: "mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400") { "Utilities" }
+          h3(class: "mb-5 text-sm font-semibold tracking-widest text-zinc-300") { "Utilities" }
           ul(class: "flex list-none flex-col gap-5") {
-            pluginLink(name: "SagaUtils", url: "https://github.com/loopwerk/SagaUtils", detail: "HTML transforms via SwiftSoup + String extensions")
+            pluginLink(name: "SagaUtils", url: "https://github.com/loopwerk/SagaUtils", detail: "HTML transforms via SwiftSoup")
             pluginLink(name: "SagaImageReader", url: "https://github.com/loopwerk/SagaImageReader", detail: "An image reader for Saga")
           }
         }
@@ -252,7 +258,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Tap into an ecosystem of Swift packages" }
         p { "Use these packages directly in your build pipeline for syntax highlighting, HTML transforms, and more." }
       }
-      ul(class: "mx-auto grid max-w-2xl list-none gap-5 md:grid-cols-2") {
+      ul(class: "code-glow mx-auto grid list-none gap-5 md:grid-cols-2 lg:grid-cols-3") {
         pluginLink(name: "Moon", url: "https://github.com/loopwerk/Moon", detail: "Multi-language syntax highlighting")
         pluginLink(name: "Bonsai", url: "https://github.com/loopwerk/Bonsai", detail: "HTML minification")
         pluginLink(name: "SwiftSoup", url: "https://github.com/scinfu/SwiftSoup", detail: "HTML parsing, manipulation, and extraction")
@@ -260,6 +266,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         pluginLink(name: "SwiftPlot", url: "https://github.com/KarthikRIyer/swiftplot", detail: "Data visualization")
         pluginLink(name: "SwiftDate", url: "https://github.com/malcommac/SwiftDate", detail: "Easy date manipulation and formatting")
         pluginLink(name: "SwiftTailwind", url: "https://github.com/loopwerk/SwiftTailwind", detail: "TailwindCSS for Swift")
+        pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
         pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
       }
     }
@@ -280,13 +287,16 @@ func featureCard(icon: String, title: String, color: String, description: NodeCo
 
 func pluginLink(name: String, url: String, detail: String) -> Node {
   li(class: "flex flex-col") {
-    a(class: "accent-link", href: url, target: "_blank") { name }
+    a(class: "accent-link inline-flex items-center gap-1.5", href: url, target: "_blank") {
+      Node.raw(githubSVG)
+      name
+    }
     span(class: "text-sm text-zinc-500") { detail }
   }
 }
 
-func growsWithCard(icon: String, title: String, description: String) -> Node {
-  div(class: "flex gap-4") {
+func growsWithCard(icon: String, color: String, title: String, description: String) -> Node {
+  div(class: "flex gap-4", style: "--card-accent: \(color)") {
     div(class: "feature-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg") {
       Node.raw(icon)
     }

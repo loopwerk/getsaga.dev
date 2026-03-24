@@ -35,7 +35,7 @@ func docSorting(_ a: Item<DocMetadata>, _ b: Item<DocMetadata>) -> Bool {
 func boldBlockquoteKeywords(_ html: String) -> String {
   html.replacingOccurrences(
     of: #"(<blockquote>\s*<p>)(\w+):\s*"#,
-    with: #"$1<div class="font-bold text-zinc-200 capitalize">$2</div> "#,
+    with: #"$1<strong class="block text-zinc-200 capitalize">$2</strong> "#,
     options: .regularExpression
   )
 }

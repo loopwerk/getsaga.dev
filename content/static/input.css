@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-accent: #ff5758;
-  --color-accent-hover: #e04e4f;
+  --color-accent: #ff9d00;
+  --color-accent-hover: #e68d00;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "Operator Mono", "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
 }
@@ -12,10 +12,11 @@ html {
   scroll-padding-top: 5rem;
 }
 
-body .background {
+body.home .background {
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 87, 88, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 70% -5%, rgba(180, 60, 200, 0.07) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 30% -5%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 30% at 70% 0%, rgba(168, 85, 247, 0.12) 0%, transparent 50%);
   background-size: 3000px 6000px;
   background-repeat: no-repeat;
   background-position: top center;
@@ -129,7 +130,12 @@ body .background {
 }
 
 pre {
-  @apply overflow-x-auto p-6 bg-zinc-900 border border-zinc-800 rounded-xl mb-6;
+  @apply overflow-x-auto mb-6 bg-zinc-950 rounded-lg p-6 border border-zinc-800;
+}
+
+.code-glow {
+  @apply bg-zinc-950 rounded-lg p-6 border border-zinc-800 rounded-xl;
+  box-shadow: 0 0 200px 80px rgba(50, 40, 70, 0.5);
 }
 
 pre:last-child {
@@ -158,12 +164,12 @@ pre:has(> code[class*="language-shell-session"])::after {
   left: 1.25rem;
   width: 0.625rem;
   height: 0.625rem;
-  background: #ff5f57;
+  background: #ff5f56;
   box-shadow: 1.125rem 0 0 #febc2e, 2.25rem 0 0 #28c840;
 }
 
 .doc-content :not(pre) > code {
-  @apply font-mono text-[0.88em] bg-zinc-900 border border-zinc-800 rounded px-1.5 py-0.5;
+  @apply font-mono text-[0.88em] bg-zinc-950 border border-zinc-800 rounded px-1.5 py-0.5;
 }
 
 .doc-content a {
@@ -183,7 +189,7 @@ pre:has(> code[class*="language-shell-session"])::after {
 }
 
 .doc-content blockquote {
-  @apply bg-zinc-900 border border-zinc-800 border-l-3 border-l-accent rounded-lg px-5 py-4 mb-6 text-base text-zinc-400 leading-relaxed;
+  @apply bg-zinc-950 border border-zinc-800 border-l-3 border-l-accent rounded-lg px-5 py-4 mb-6 text-base text-zinc-400 leading-relaxed;
 }
 
 .doc-content blockquote p:last-child {
@@ -197,10 +203,6 @@ pre:has(> code[class*="language-shell-session"])::after {
 
 .search-icon svg {
   @apply h-5 w-5;
-}
-
-.search-input {
-  @apply w-full rounded-xl border border-zinc-800 bg-zinc-800 py-3 pr-4 pl-12 text-base text-zinc-200 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-600;
 }
 
 .search-result {
@@ -225,7 +227,7 @@ pre:has(> code[class*="language-shell-session"])::after {
 
 .search-result-declaration,
 .search-result-declaration code {
-  @apply p-3 bg-zinc-900! border-zinc-800 rounded-lg mb-2 mt-2 whitespace-pre-wrap! break-words;
+  @apply p-3 bg-zinc-950! border-zinc-800 rounded-lg mb-2 mt-2 whitespace-pre-wrap! break-words;
 }
 
 .search-result-declaration {

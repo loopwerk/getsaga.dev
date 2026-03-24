@@ -27,15 +27,15 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         link(href: "/static/favicon.ico", rel: "shortcut icon")
         link(href: "/static/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180")
         meta(content: "Saga", name: "apple-mobile-web-app-title")
-        meta(content: "#09090b", name: "theme-color")
+        meta(content: "#18181b", name: "theme-color")
         link(href: "/static/site.webmanifest", rel: "manifest")
         if !Saga.isDev {
           script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710"])
         }
       }
 
-      body(class: "bg-zinc-950 text-zinc-400 font-sans leading-relaxed antialiased \(activePage)") {
-        div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl") {
+      body(class: "bg-[#1c1a22] text-zinc-400 font-sans leading-relaxed antialiased \(activePage)") {
+        div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-xl") {
           nav(class: "mx-auto flex h-full max-w-5xl items-center justify-between px-8") {
             a(class: "flex items-center", href: "/") {
               img(alt: "Saga", class: "h-4 md:h-6 w-auto mt-1.5", src: "/static/saga_word.svg")
@@ -82,7 +82,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
           children()
         }
 
-        footer(class: "border-t border-zinc-800 px-8 py-12 text-center") {
+        footer(class: "py-12 text-center") {
           p(class: "text-zinc-500 text-sm") {
             "This site is built with"
             a(class: "accent-link", href: "https://github.com/loopwerk/Saga", target: "_blank") { "Saga" }
@@ -211,7 +211,7 @@ func renderSearch(context: PageRenderingContext) -> Node {
     section(class: "mx-auto max-w-5xl px-8 pt-24 pb-24") {
       form(action: "/search/", class: "relative mb-8", id: "search-form") {
         Node.raw(#"<div class="search-icon">\#(searchSVG)</div>"#)
-        input(class: "search-input", id: "search", name: "q", placeholder: "Search documentation...", type: "text", customAttributes: ["autocomplete": "off"])
+        input(class: "w-full rounded-xl border border-zinc-800 bg-zinc-950 py-3 pr-4 pl-12 text-base text-zinc-200 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-600", id: "search", name: "q", placeholder: "Search documentation...", type: "text", customAttributes: ["autocomplete": "off"])
       }
 
       p(class: "text-sm text-zinc-500 mb-8", id: "summary")
