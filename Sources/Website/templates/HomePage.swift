@@ -7,11 +7,7 @@ let iconShield = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap
 
 let iconChevrons = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>"#
 
-let iconBox = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>"#
-
 let iconRefresh = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>"#
-
-let iconRocket = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>"#
 
 let iconCode = #"<svg class="h-5 w-5 fill-none stroke-2" style="stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>"#
 
@@ -203,9 +199,9 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
       div(class: "mx-auto flex max-w-2xl flex-col gap-8", style: "--card-accent: var(--color-accent)") {
         growsWithCard(icon: iconLayers, title: "Typed metadata", description: "A single site can include blog articles with tags, a project portfolio with App Store links, movie reviews with ratings. Each with their own strongly typed metadata, indexed, paginated, or grouped independently.")
-        
+
         growsWithCard(icon: iconDatabase, title: "Programmatic content", description: "Not all content lives on disk. Fetch items from APIs, databases, or any async data source and feed them through the same writer pipeline. Generate pages from code: landing pages, sitemaps, search indexes, 404 pages. No content file on disk needed.")
-        
+
         growsWithCard(icon: iconGitBranch, title: "Nested processing", description: "Chain processing steps hierarchically to render complex content. Photos in albums in folders? No problem, use Saga to build your photo gallery.")
 
         growsWithCard(icon: iconMap, title: "Tags, feeds, and sitemaps", description: "Generate tag pages, Atom feeds, and XML sitemaps with dedicated writers. Help your visitors and search engines discover your content.")

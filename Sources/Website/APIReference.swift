@@ -2,8 +2,8 @@ import Foundation
 import HTML
 import Moon
 import Parsley
-import SagaPathKit
 import Saga
+import SagaPathKit
 import Sigil
 import SymbolKit
 

@@ -17,7 +17,7 @@ try await saga
   .ignore("output.css")
   .ignore("content/docs/*")
 
-  /// Compile Tailwind CSS
+  // Compile Tailwind CSS
   .beforeRead { _ in
     try await tailwind.run(
       input: "content/static/input.css",
@@ -25,7 +25,7 @@ try await saga
       options: .minify
     )
   }
-  
+
   // Guide documentation (from DocC markdown files)
   .register(
     folder: "docs",
@@ -76,7 +76,7 @@ try await saga
     return Bonsai.minifyHTML(html)
   }
 
-  /// Index the site with Pagefind
+  // Index the site with Pagefind
   .afterWrite { _ in
     let pagefind = Process()
     pagefind.executableURL = URL(fileURLWithPath: "/usr/bin/env")
