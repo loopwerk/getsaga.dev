@@ -1,5 +1,5 @@
 {
-  "originHash" : "6bf3acd32b952e7c1e06753b1ab66aff07089c30de00c8f15ef8eccef47662f0",
+  "originHash" : "4d1bdb0ec6442bdc25abcabecb19972512667c1aca810362b15594c19075ba09",
   "pins" : [
     {
       "identity" : "bonsai",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "1384f65054372000ded7dbf1f4b4e27c8fac2198",
         "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "saga",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/loopwerk/Saga",
+      "state" : {
+        "revision" : "13ed928bb0e4fb20ba489274f2483144edb76752",
+        "version" : "3.0.0"
       }
     },
     {
@@ -123,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "fd541c4b3fa7dcec2e7cfe049505b6e4382cd66b",
-        "version" : "2.13.2"
+        "revision" : "e40910293caa6d94802e1a69b80517c88e77eaff",
+        "version" : "2.13.3"
       }
     },
     {
