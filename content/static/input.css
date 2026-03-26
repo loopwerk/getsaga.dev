@@ -106,7 +106,7 @@ body.home .background {
 }
 
 .release-notes .breaking-changes {
-  @apply bg-red-950/30 border border-red-900/50 rounded-lg px-5 py-4 mt-6;
+  @apply bg-red-850/80 border border-red-900/50 rounded-lg px-5 py-4 mt-6;
 }
 
 .release-notes .breaking-changes h2 {

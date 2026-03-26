@@ -102,7 +102,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
 }
 
 func renderReleaseNotesRedirect(context: PageRenderingContext) -> String {
-  let major = context.allItems.compactMap { $0 as? Item<ReleaseMetadata> }.sorted { $0.date > $1.date }.first?.metadata.major ?? 2
+  let major = context.allItems.compactMap { $0 as? Item<ReleaseMetadata> }.sorted { $0.date > $1.date }.first?.metadata.major ?? 3
   return Saga.redirectHTML(to: "/docs/releasenotes/\(major).x/")
 }
 

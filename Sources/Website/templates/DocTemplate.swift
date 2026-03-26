@@ -5,7 +5,7 @@ import SagaPathKit
 
 // MARK: - Doc sidebar
 
-func docSidebar(docs: [Item<DocMetadata>], currentUrl: String) -> Node {
+func docSidebar(docs: [Item<DocMetadata>], currentUrl: String, maxMajor: Int) -> Node {
   let topics = docs.filter { !$0.url.contains("/guides/") }
   let guides = docs.filter { $0.url.contains("/guides/") }
 
@@ -18,7 +18,7 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String) -> Node {
         }
       }
       li {
-        a(class: "sidebar-link\(currentUrl == "/docs/releasenotes/" ? " sidebar-link-active" : "")", href: "/docs/releasenotes/") { "Release Notes" }
+        a(class: "sidebar-link\(currentUrl == "/docs/releasenotes/" ? " sidebar-link-active" : "")", href: "/docs/releasenotes/\(maxMajor).x/") { "Release Notes" }
       }
     }
     if !guides.isEmpty {
@@ -39,10 +39,11 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String) -> Node {
 func renderGuidesIndex(context: PageRenderingContext) -> Node {
   let docs = context.allItems.compactMap { $0 as? Item<DocMetadata> }.filter { $0.url.contains("/guides/") }
   let guides = docs.filter { $0.url.contains("/guides/") }
+  let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? 3
 
   return layout(title: "Documentation - Guides", activePage: .docs) {
     div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
-      docSidebar(docs: docs, currentUrl: "/docs/guides/")
+      docSidebar(docs: docs, currentUrl: "/docs/guides/", maxMajor: maxMajor)
       main(class: "doc-content min-w-0") {
         h1 { "Guides" }
         ul(class: "mt-8") {
@@ -61,9 +62,11 @@ func renderGuidesIndex(context: PageRenderingContext) -> Node {
 
 func renderDocPage(context: ItemRenderingContext<DocMetadata>) -> Node {
   let hasToc = context.item.metadata.toc != nil
+  let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? 3
+
   return layout(title: "Documentation - \(context.item.title)", activePage: .docs) {
     div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] \(hasToc ? "lg:grid-cols-[220px_1fr_180px]" : "") gap-12") {
-      docSidebar(docs: context.items, currentUrl: context.item.url)
+      docSidebar(docs: context.items, currentUrl: context.item.url, maxMajor: maxMajor)
       main(class: "doc-content min-w-0", customAttributes: ["data-pagefind-body": ""]) {
         Node.raw(#"<span data-pagefind-meta="kind" style="display:none">Topic</span>"#)
         h1 { context.item.title }
