@@ -34,7 +34,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         }
       }
 
-      body(class: "bg-[#1c1a22] text-zinc-400 font-sans leading-relaxed antialiased \(activePage)") {
+      body(class: "bg-[#1c1a22] text-zinc-200 font-sans leading-relaxed antialiased \(activePage)") {
         div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-xl") {
           nav(class: "mx-auto flex h-full max-w-5xl items-center justify-between px-8") {
             a(class: "flex items-center", href: "/") {
@@ -154,9 +154,9 @@ func renderSearch(context: PageRenderingContext) -> Node {
               const kind = result.meta.kind;
               const declaration = result.meta.declaration;
 
-              let header = '<span class="search-result-title">' + result.meta.title + '</span>';
+              let header = '<span class="text-lg font-bold">' + result.meta.title + '</span>';
               if (kind) {
-                header = '<span class="search-result-kind">' + kind + '</span>' + header;
+                header = '<span class="text-xs font-semibold uppercase tracking-wide text-zinc-400 mr-2">' + kind + '</span>' + header;
               }
               item.innerHTML = '<div class="search-result-header">' + header + '</div>';
 
@@ -208,13 +208,13 @@ func renderSearch(context: PageRenderingContext) -> Node {
       )
     }
 
-    section(class: "mx-auto max-w-5xl px-8 pt-24 pb-24") {
+    section(class: "mx-auto max-w-5xl px-8 pt-32 pb-24") {
       form(action: "/search/", class: "relative mb-8", id: "search-form") {
         Node.raw(#"<div class="search-icon">\#(searchSVG)</div>"#)
         input(class: "w-full rounded-xl border border-zinc-800 bg-zinc-950 py-3 pr-4 pl-12 text-base text-zinc-200 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-600", id: "search", name: "q", placeholder: "Search documentation...", type: "text", customAttributes: ["autocomplete": "off"])
       }
 
-      p(class: "text-sm text-zinc-500 mb-8", id: "summary")
+      p(class: "text-sm text-zinc-400 mb-8", id: "summary")
       div(id: "results")
     }
   }

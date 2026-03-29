@@ -39,7 +39,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
 
       img(alt: "logo", class: "mx-auto mb-10 block w-32 md:w-48", src: "/static/saga_ship.svg")
 
-      h1(class: "mb-5 text-5xl font-extrabold leading-tight tracking-tight text-zinc-200 md:text-6xl") {
+      h1(class: "mb-5 text-5xl font-extrabold leading-tight tracking-tight md:text-6xl") {
         "Set sail with"
         span(class: "text-accent") { "Saga" }
         %","
@@ -65,15 +65,15 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "getting-started") {
       div(class: "grid items-center gap-12 md:grid-cols-2") {
         div {
-          h2(class: "mb-3 text-3xl font-bold tracking-tight text-zinc-200") { "Up and running in seconds" }
+          h2(class: "mb-3 text-3xl font-bold tracking-tight") { "Up and running in seconds" }
           p(class: "mb-6 leading-relaxed") { "Install the CLI, scaffold a project, and start a dev server with auto-reload. Your site is a Swift program, ready to build and serve." }
           div(class: "flex flex-col gap-3") {
             div(class: "flex items-center gap-4") {
-              span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-500") { "Homebrew" }
+              span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-400") { "Homebrew" }
               code(class: "rounded-md border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-sm") { "brew install loopwerk/tap/saga" }
             }
             div(class: "flex items-center gap-4") {
-              span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-500") { "Mint" }
+              span(class: "min-w-18 text-xs font-semibold uppercase tracking-widest text-zinc-400") { "Mint" }
               code(class: "rounded-md border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-sm") { "mint install loopwerk/saga-cli" }
             }
           }
@@ -91,7 +91,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Features
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "features") {
       div(class: "mb-12 md:text-center") {
-        h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Built for developers who love Swift" }
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Built for developers who love Swift" }
         p { "Everything you need to build fast, type-safe static sites." }
       }
 
@@ -121,7 +121,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Code Example
     section(class: "mx-auto max-w-5xl px-8 pt-8 pb-24", id: "code") {
       div(class: "mb-10 md:text-center") {
-        h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Everything is Swift, everything is typed" }
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Everything is Swift, everything is typed" }
         p(class: "text-base") { "Define your entire pipeline in Swift. From a simple blog..." }
       }
       div(class: "mx-auto max-w-3xl") {
@@ -200,7 +200,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Growing Beyond
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "beyond") {
       div(class: "mb-12 md:text-center") {
-        h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Grows with your site" }
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
       }
       div(class: "mx-auto flex max-w-2xl flex-col gap-8") {
@@ -223,7 +223,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Plugins
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "plugins") {
       div(class: "mb-12 md:text-center") {
-        h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Modular by design" }
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Modular by design" }
         p(class: "text-base") { "Compose your site with readers, renderers, and plugins that fit your needs." }
       }
       div(class: "code-glow grid gap-8 md:grid-cols-2 lg:grid-cols-3") {
@@ -255,7 +255,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Ecosystem
     section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "ecosystem") {
       div(class: "mb-12 md:text-center") {
-        h2(class: "mb-2 text-3xl font-bold tracking-tight text-zinc-200") { "Tap into an ecosystem of Swift packages" }
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Tap into an ecosystem of Swift packages" }
         p { "Use these packages directly in your build pipeline for syntax highlighting, HTML transforms, and more." }
       }
       ul(class: "code-glow mx-auto grid list-none gap-5 md:grid-cols-2 lg:grid-cols-3") {
@@ -270,6 +270,17 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
       }
     }
+
+    // Requirements
+    section(class: "mx-auto max-w-5xl px-8 pt-16 pb-24", id: "requirements") {
+      div(class: "md:text-center") {
+        h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Requirements" }
+        p(class: "text-base mb-12") { "Saga requires Swift 6.0+ and runs on macOS 14+ and Linux." }
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
+          "Get Started"
+        }
+      }
+    }
   }
 }
 
@@ -280,8 +291,8 @@ func featureCard(icon: String, title: String, color: String, description: NodeCo
     div(class: "feature-icon mb-3 flex h-9 w-9 items-center justify-center rounded-lg") {
       Node.raw(icon)
     }
-    h3(class: "mb-1 font-semibold text-zinc-200") { title }
-    p(class: "text-base leading-normal max-w-2xl") { description }
+    h3(class: "mb-1 font-semibold") { title }
+    p(class: "text-base leading-normal max-w-2xl text-zinc-400") { description }
   }
 }
 
@@ -291,7 +302,7 @@ func pluginLink(name: String, url: String, detail: String) -> Node {
       Node.raw(githubSVG)
       name
     }
-    span(class: "text-sm text-zinc-500") { detail }
+    span(class: "text-sm text-zinc-400") { detail }
   }
 }
 
@@ -301,8 +312,8 @@ func growsWithCard(icon: String, color: String, title: String, description: Stri
       Node.raw(icon)
     }
     div {
-      h3(class: "mb-1 text-lg font-bold text-zinc-200") { title }
-      p(class: "text-base leading-relaxed") { description }
+      h3(class: "mb-1 text-lg font-bold") { title }
+      p(class: "text-base leading-relaxed text-zinc-400") { description }
     }
   }
 }

@@ -85,7 +85,7 @@ func wrapListItemDescriptions(_ doc: SwiftSoup.Document, item: Item<ReleaseMetad
     guard parts.count > 1 else { continue }
     let first = parts[0]
     let rest = parts.dropFirst().joined(separator: "<br />")
-    try li.html(first + #"<div class="text-sm text-zinc-500 mt-2">"# + rest + "</div>")
+    try li.html(first + #"<div class="text-zinc-400 mt-2">"# + rest + "</div>")
   }
 }
 

@@ -10,8 +10,8 @@ private let displayDateFormatter: DateFormatter = {
 }()
 
 private func versionSidebar(currentMajor: Int, maxMajor: Int) -> Node {
-  nav(class: "hidden md:block md:sticky md:top-20 md:self-start") {
-    p(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3") { "SERIES" }
+  nav(class: "hidden md:block md:sticky md:top-24 md:self-start") {
+    p(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3 pl-3") { "SERIES" }
     ul(class: "list-none flex flex-col gap-1 p-0") {
       (0 ... maxMajor).reversed().map { major in
         let label = "\(major).x"
@@ -31,7 +31,7 @@ func renderReleaseNotes(context: PartitionedRenderingContext<Int, ReleaseMetadat
   let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? major
 
   return layout(title: "Release Notes - \(major).x", activePage: .docs) {
-    div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[220px_1fr_180px] gap-12") {
+    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[220px_1fr_180px] gap-12") {
       docSidebar(docs: docs, currentUrl: "/docs/releasenotes/", maxMajor: maxMajor)
 
       main(class: "doc-content min-w-0") {
@@ -39,10 +39,13 @@ func renderReleaseNotes(context: PartitionedRenderingContext<Int, ReleaseMetadat
 
         releases.map { release in
           article(class: "mb-12") {
-            h2(id: release.metadata.tagName) {
-              a(href: release.metadata.htmlUrl, target: "_blank") { release.title }
+            h2(class: "flex items-center gap-3", id: release.metadata.tagName) {
+              release.title
+              a(href: release.metadata.htmlUrl, target: "_blank") {
+                Node.raw(githubSVG)
+              }
             }
-            p(class: "text-sm text-zinc-500 -mt-2 mb-4") {
+            p(class: "text-sm text-zinc-400 -mt-4 mb-4") {
               displayDateFormatter.string(from: release.date)
             }
             div(class: "release-notes") {

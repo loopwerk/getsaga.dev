@@ -45,7 +45,7 @@ body.home .background {
 }
 
 .doc-sidebar {
-  @apply md:sticky md:top-20 md:self-start md:pt-2 md:max-h-[calc(100vh-5rem)] md:overflow-y-auto md:overscroll-contain;
+  @apply md:sticky md:top-24 md:self-start md:pt-2 md:max-h-[calc(100vh-5rem)] md:overflow-y-auto md:overscroll-contain;
 }
 
 .sidebar-link {
@@ -55,7 +55,6 @@ body.home .background {
 .sidebar-link-active, .sidebar-link:hover {
   @apply text-accent bg-zinc-800;
 }
-
 
 /* Top-level declaration block */
 .doc-content pre.top-declaration {
@@ -90,15 +89,15 @@ body.home .background {
 
 /* Doc content - styles for rendered markdown we don't control */
 .doc-content h1 {
-  @apply text-4xl font-extrabold tracking-tight leading-tight mb-2 text-zinc-200;
+  @apply text-4xl font-extrabold tracking-tight leading-tight mb-2;
 }
 
 .doc-content h2 {
-  @apply text-2xl font-bold tracking-tight text-zinc-200 mt-12 mb-4;
+  @apply text-2xl font-bold tracking-tight mt-12 mb-4;
 }
 
 .doc-content h3 {
-  @apply text-lg font-bold mt-8 mb-3 text-zinc-200;
+  @apply text-lg font-bold mt-8 mb-3;
 }
 
 .release-notes h2 {
@@ -106,15 +105,11 @@ body.home .background {
 }
 
 .release-notes .breaking-changes {
-  @apply bg-red-850/80 border border-red-900/50 rounded-lg px-5 py-4 mt-6;
+  @apply bg-red-900/60 border border-red-900/50 rounded-lg px-5 py-4 mt-6;
 }
 
 .release-notes .breaking-changes h2 {
   @apply mt-0;
-}
-
-.release-notes .breaking-changes * {
-  @apply text-zinc-200;
 }
 
 .release-notes .breaking-changes ul:last-child {
@@ -122,7 +117,7 @@ body.home .background {
 }
 
 .doc-content p {
-  @apply text-base text-zinc-400 leading-relaxed mb-5;
+  @apply leading-relaxed mb-5;
 }
 
 .doc-content p:last-child {
@@ -177,11 +172,11 @@ pre:has(> code[class*="language-shell-session"])::after {
 }
 
 .doc-content ul {
-  @apply mb-5 pl-6 text-zinc-400 list-disc;
+  @apply mb-5 pl-6 list-disc;
 }
 
 .doc-content ol {
-  @apply mb-5 pl-6 text-zinc-400 list-decimal;
+  @apply mb-5 pl-6 list-decimal;
 }
 
 .doc-content li {
@@ -189,7 +184,7 @@ pre:has(> code[class*="language-shell-session"])::after {
 }
 
 .doc-content blockquote {
-  @apply bg-zinc-950 border border-zinc-800 border-l-3 border-l-accent rounded-lg px-5 py-4 mb-6 text-base text-zinc-400 leading-relaxed;
+  @apply bg-zinc-950 border border-zinc-800 border-l-3 border-l-accent rounded-lg px-5 py-4 mb-6 text-base leading-relaxed;
 }
 
 .doc-content blockquote p:last-child {
@@ -222,7 +217,7 @@ pre:has(> code[class*="language-shell-session"])::after {
 }
 
 .search-result-title {
-  @apply text-lg font-bold text-zinc-200;
+  @apply text-lg font-bold;
 }
 
 .search-result-declaration,
@@ -239,7 +234,7 @@ pre:has(> code[class*="language-shell-session"])::after {
 }
 
 .search-result-excerpt {
-  @apply text-sm text-zinc-400 leading-relaxed mt-2 mb-0 break-words;
+  @apply text-sm leading-relaxed mt-2 mb-0 break-words;
 }
 
 .search-result-excerpt mark {

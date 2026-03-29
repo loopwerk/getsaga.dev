@@ -34,7 +34,7 @@ func conformanceList(_ conformances: [Conformance]) -> Node {
 
 func renderAPIIndex(context: ItemsRenderingContext<APIMetadata>) -> Node {
   return layout(title: "API Reference", activePage: .api) {
-    div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
+    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
       apiSidebar(currentSlug: "/api/", allItems: context.allItems)
 
       main(class: "doc-content min-w-0") {
@@ -52,7 +52,7 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
   let meta = context.item.metadata
 
   return layout(title: context.item.title, activePage: .api) {
-    div(class: "mx-auto max-w-5xl px-8 pt-20 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
+    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
       apiSidebar(currentSlug: context.item.url, allItems: context.allItems)
 
       main(class: "doc-content min-w-0", customAttributes: ["data-pagefind-body": ""]) {
@@ -173,7 +173,7 @@ func apiSidebar(currentSlug: String, allItems: [AnyItem]) -> Node {
       guard let items = grouped[kind], !items.isEmpty else { return nil }
       let sorted = items.sorted { $0.title < $1.title }
       return [
-        h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mt-6 mb-2 first:mt-0") { kind.pluralDisplayName },
+        h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mt-6 mb-2 first:mt-0 pl-3") { kind.pluralDisplayName },
         ul(class: "list-none flex flex-col gap-1 p-0") {
           sorted.map { item in
             li {
