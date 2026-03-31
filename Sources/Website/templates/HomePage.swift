@@ -259,15 +259,18 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         p { "Use these packages directly in your build pipeline for syntax highlighting, HTML transforms, and more." }
       }
       ul(class: "code-glow mx-auto grid list-none gap-5 md:grid-cols-2 lg:grid-cols-3") {
-        pluginLink(name: "Moon", url: "https://github.com/loopwerk/Moon", detail: "Multi-language syntax highlighting")
         pluginLink(name: "Bonsai", url: "https://github.com/loopwerk/Bonsai", detail: "HTML minification")
-        pluginLink(name: "SwiftSoup", url: "https://github.com/scinfu/SwiftSoup", detail: "HTML parsing, manipulation, and extraction")
+        pluginLink(name: "FeedKit", url: "https://github.com/nmdias/FeedKit", detail: "Read and write RSS, Atom, and JSON feeds")
+        pluginLink(name: "Moon", url: "https://github.com/loopwerk/Moon", detail: "Multi-language syntax highlighting")
+        pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
+        pluginLink(name: "SwiftCSV", url: "https://github.com/swiftcsv/SwiftCSV", detail: "CSV parser")
+        pluginLink(name: "SwiftDate", url: "https://github.com/malcommac/SwiftDate", detail: "Easy date manipulation and formatting")
         pluginLink(name: "SwiftGD", url: "https://github.com/twostraws/SwiftGD", detail: "Image generation")
         pluginLink(name: "SwiftPlot", url: "https://github.com/KarthikRIyer/swiftplot", detail: "Data visualization")
-        pluginLink(name: "SwiftDate", url: "https://github.com/malcommac/SwiftDate", detail: "Easy date manipulation and formatting")
+        pluginLink(name: "SwiftSoup", url: "https://github.com/scinfu/SwiftSoup", detail: "HTML parsing, manipulation, and extraction")
         pluginLink(name: "SwiftTailwind", url: "https://github.com/loopwerk/SwiftTailwind", detail: "TailwindCSS for Swift")
-        pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
-        pluginLink(name: "Sigil", url: "https://github.com/loopwerk/Sigil", detail: "SymbolKit to syntax-highlighted HTML")
+        pluginLink(name: "XMLCoder", url: "https://github.com/CoreOffice/XMLCoder", detail: "Easy XML parsing using Codable")
+        pluginLink(name: "Yams", url: "https://github.com/jpsim/Yams", detail: "YAML parser")
       }
     }
 
