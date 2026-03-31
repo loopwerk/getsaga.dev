@@ -238,8 +238,9 @@ func renderHomePage(context: PageRenderingContext) -> Node {
         div {
           h3(class: "mb-5 text-sm font-semibold tracking-widest text-zinc-300") { "Renderers" }
           ul(class: "flex list-none flex-col gap-5") {
-            pluginLink(name: "SagaSwimRenderer", url: "https://github.com/loopwerk/SagaSwimRenderer", detail: "type-safe HTML with Swim")
+            pluginLink(name: "SagaSwimRenderer", url: "https://github.com/loopwerk/SagaSwimRenderer", detail: "Type-safe HTML with Swim")
             pluginLink(name: "SagaStencilRenderer", url: "https://github.com/loopwerk/SagaStencilRenderer", detail: "Stencil templates")
+            pluginLink(name: "SagaLeafRenderer", url: "https://github.com/loopwerk/SagaLeafRenderer", detail: "Vapor's Leaf templates")
           }
         }
         div {
