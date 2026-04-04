@@ -247,7 +247,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           h3(class: "mb-5 text-sm font-semibold tracking-widest text-zinc-300") { "Utilities" }
           ul(class: "flex list-none flex-col gap-5") {
             pluginLink(name: "SagaUtils", url: "https://github.com/loopwerk/SagaUtils", detail: "HTML transforms via SwiftSoup")
-            pluginLink(name: "SagaImageReader", url: "https://github.com/loopwerk/SagaImageReader", detail: "An image reader for Saga")
+            pluginLink(name: "SagaImageReader", url: "https://github.com/loopwerk/SagaImageReader", detail: "An image + EXIF data reader")
           }
         }
       }
