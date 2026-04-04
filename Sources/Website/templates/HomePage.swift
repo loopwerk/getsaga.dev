@@ -32,7 +32,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     // Hero with buttons
     section(class: "mx-auto max-w-5xl px-6 pt-32 pb-24 sm:pb-32 text-center md:px-8") {
       a(class: "mb-8 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 p-2 text-sm font-medium text-accent transition-colors hover:bg-accent/20", href: "/docs/migrate/") {
-        span(class: "rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-white") { "Saga 3" }
+        span(class: "rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-black") { "Saga 3" }
         "See what's new"
         Node.raw(#"<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>"#)
       }
@@ -52,7 +52,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       }
 
       div(class: "flex flex-col sm:flex-row items-center flex-wrap justify-center gap-4") {
-        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
           "Get Started"
         }
         a(class: "inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-7 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-zinc-200 hover:shadow-lg", href: "https://github.com/loopwerk/Saga", target: "_blank") {
@@ -280,7 +280,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
       div(class: "text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Requirements" }
         p(class: "text-base mb-12") { "Saga requires Swift 6.0+ and runs on macOS 14+ and Linux." }
-        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-black transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/") {
           "Get Started"
         }
       }

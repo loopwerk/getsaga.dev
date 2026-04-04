@@ -82,7 +82,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
           children()
         }
 
-        footer(class: "py-12 text-center") {
+        footer(class: "pb-12 text-center") {
           p(class: "text-zinc-500 text-sm") {
             "This site is built with"
             a(class: "accent-link", href: "https://github.com/loopwerk/Saga", target: "_blank") { "Saga" }
