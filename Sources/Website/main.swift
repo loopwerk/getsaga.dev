@@ -14,8 +14,8 @@ let tailwind = SwiftTailwind(version: "4.2.1")
 try rewriteMarkdownDocs(inputPath: saga.inputPath)
 
 try await saga
-  .ignore("output.css")
-  .ignore("content/docs/*")
+  .ignoreChanges("output.css")
+  .ignoreChanges("content/docs/*")
 
   // Compile Tailwind CSS
   .beforeRead { _ in
