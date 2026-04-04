@@ -27,7 +27,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         link(href: "/static/favicon.ico", rel: "shortcut icon")
         link(href: "/static/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180")
         meta(content: "Saga", name: "apple-mobile-web-app-title")
-        meta(content: "#18181b", name: "theme-color")
+        meta(content: "#18181a", name: "theme-color")
         link(href: "/static/site.webmanifest", rel: "manifest")
         if !Saga.isDev {
           script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710"])
@@ -35,7 +35,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
       }
 
       body(class: "bg-[#1c1a22] text-zinc-200 font-sans leading-relaxed antialiased \(activePage)") {
-        div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-xl") {
+        div(class: "fixed inset-x-0 top-0 z-50 h-16 border-b border-zinc-800 bg-zinc-900 sm:bg-zinc-900/80 sm:backdrop-blur-xl") {
           nav(class: "mx-auto flex h-full max-w-5xl items-center justify-between px-8") {
             a(class: "flex items-center", href: "/") {
               img(alt: "Saga", class: "h-4 md:h-6 w-auto mt-1.5", src: "/static/saga_word.svg")
