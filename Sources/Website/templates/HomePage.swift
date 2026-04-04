@@ -232,7 +232,6 @@ func renderHomePage(context: PageRenderingContext) -> Node {
           ul(class: "flex list-none flex-col gap-5") {
             pluginLink(name: "SagaParsleyMarkdownReader", url: "https://github.com/loopwerk/SagaParsleyMarkdownReader", detail: "Parsley")
             pluginLink(name: "SagaInkMarkdownReader", url: "https://github.com/loopwerk/SagaInkMarkdownReader", detail: "Ink + Splash")
-            pluginLink(name: "SagaPythonMarkdownReader", url: "https://github.com/loopwerk/SagaPythonMarkdownReader", detail: "Python-Markdown + Pygments")
           }
         }
         div {
