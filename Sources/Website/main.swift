@@ -33,9 +33,9 @@ try await saga
     readers: [.parsleyMarkdownReader],
     itemProcessor: sequence(
       processDocItem,
-      syntaxHighlight,
       boldBlockquoteKeywords,
-      swiftSoupProcessor(processExternalLinks, renderToc)
+      swiftSoupProcessor(processExternalLinks, renderToc),
+      syntaxHighlight
     ),
     sorting: docSorting,
     writers: [

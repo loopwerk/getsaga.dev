@@ -9,7 +9,7 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String, maxMajor: Int) ->
   let topics = docs.filter { !$0.url.contains("/guides/") }
   let guides = docs.filter { $0.url.contains("/guides/") }
 
-  return aside(class: "doc-sidebar") {
+  return aside(class: "doc-sidebar pb-6") {
     h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2 pl-3") { "TOPICS" }
     ul(class: "list-none flex flex-col gap-1 p-0") {
       topics.map { doc in
@@ -21,13 +21,12 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String, maxMajor: Int) ->
         a(class: "sidebar-link\(currentUrl == "/docs/releasenotes/" ? " sidebar-link-active" : "")", href: "/docs/releasenotes/\(maxMajor).x/") { "Release Notes" }
       }
     }
-    if !guides.isEmpty {
-      h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2 mt-6 pl-3") { "GUIDES" }
-      ul(class: "list-none flex flex-col gap-1 p-0") {
-        guides.map { doc in
-          li {
-            a(class: "sidebar-link\(doc.url == currentUrl ? " sidebar-link-active" : "")", href: doc.url) { doc.title }
-          }
+
+    h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2 mt-6 pl-3") { "GUIDES" }
+    ul(class: "list-none flex flex-col gap-1 p-0") {
+      guides.map { doc in
+        li {
+          a(class: "sidebar-link\(doc.url == currentUrl ? " sidebar-link-active" : "")", href: doc.url) { doc.title }
         }
       }
     }
