@@ -31,7 +31,7 @@ func renderReleaseNotes(context: PartitionedRenderingContext<Int, ReleaseMetadat
   let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? major
 
   return layout(title: "Release Notes - \(major).x", activePage: .docs) {
-    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[220px_1fr_180px] gap-12") {
+    div(class: "mx-auto max-w-5xl px-6 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[220px_1fr_180px] gap-12") {
       docSidebar(docs: docs, currentUrl: "/docs/releasenotes/", maxMajor: maxMajor)
 
       main(class: "doc-content min-w-0") {

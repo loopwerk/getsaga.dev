@@ -84,7 +84,7 @@ body.home .background {
 }
 
 .member-doc {
-  @apply pl-8 mt-1;
+  @apply pl-6 mt-1;
 }
 
 /* Doc content - styles for rendered markdown we don't control */

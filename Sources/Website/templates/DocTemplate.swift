@@ -41,7 +41,7 @@ func renderGuidesIndex(context: PageRenderingContext) -> Node {
   let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? 3
 
   return layout(title: "Documentation - Guides", activePage: .docs) {
-    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
+    div(class: "mx-auto max-w-5xl px-6 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12") {
       docSidebar(docs: docs, currentUrl: "/docs/guides/", maxMajor: maxMajor)
       main(class: "doc-content min-w-0") {
         h1 { "Guides" }
@@ -64,7 +64,7 @@ func renderDocPage(context: ItemRenderingContext<DocMetadata>) -> Node {
   let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? 3
 
   return layout(title: "Documentation - \(context.item.title)", activePage: .docs) {
-    div(class: "mx-auto max-w-5xl px-8 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] \(hasToc ? "lg:grid-cols-[220px_1fr_180px]" : "") gap-12") {
+    div(class: "mx-auto max-w-5xl px-6 pt-24 pb-16 grid grid-cols-1 md:grid-cols-[220px_1fr] \(hasToc ? "lg:grid-cols-[220px_1fr_180px]" : "") gap-12") {
       docSidebar(docs: context.items, currentUrl: context.item.url, maxMajor: maxMajor)
       main(class: "doc-content min-w-0", customAttributes: ["data-pagefind-body": ""]) {
         Node.raw(#"<span data-pagefind-meta="kind" style="display:none">Topic</span>"#)

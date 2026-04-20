@@ -24,3 +24,14 @@ func syntaxHighlight<M>(item: Item<M>) {
 func renderToc(_ doc: Document, item: Item<DocMetadata>) throws {
   item.metadata.toc = try buildTOCList(doc)
 }
+
+/// Insert `<wbr>` after each `:` inside inline `<code>` elements so long Swift-style
+/// identifiers like `atomFeed(title:author:baseURL:)` can wrap on narrow viewports.
+func addCodeWordBreaks<M>(_ doc: Document, item: Item<M>) throws {
+  let inlineCodes = try doc.select("code").array().filter { $0.parent()?.tagName() != "pre" }
+  for code in inlineCodes {
+    let html = try code.html()
+    guard html.contains(":") else { continue }
+    try code.html(html.replacingOccurrences(of: ":", with: ":<wbr>"))
+  }
+}

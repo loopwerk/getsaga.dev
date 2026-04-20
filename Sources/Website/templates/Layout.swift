@@ -108,7 +108,7 @@ func renderReleaseNotesRedirect(context: PageRenderingContext) -> String {
 
 func render404Page(context: PageRenderingContext) -> Node {
   layout(title: "Page not found", activePage: .other) {
-    section(class: "mx-auto max-w-5xl px-8 pt-32 pb-24 text-center") {
+    section(class: "mx-auto max-w-5xl px-6 pt-32 pb-24 text-center") {
       img(alt: "Saga", class: "mx-auto mb-10 block w-32 md:w-48", src: "/static/saga_ship.svg")
       h1(class: "mb-4 text-4xl font-bold text-zinc-200") { "404 Lost at Sea" }
       p(class: "mb-8 text-lg") { "The page you're looking for doesn't exist." }
@@ -208,7 +208,7 @@ func renderSearch(context: PageRenderingContext) -> Node {
       )
     }
 
-    section(class: "mx-auto max-w-5xl px-8 pt-32 pb-24") {
+    section(class: "mx-auto max-w-5xl px-6 pt-32 pb-24") {
       form(action: "/search/", class: "relative mb-8", id: "search-form") {
         Node.raw(#"<div class="search-icon">\#(searchSVG)</div>"#)
         input(class: "w-full rounded-xl border border-zinc-800 bg-zinc-950 py-3 pr-4 pl-12 text-base text-zinc-200 placeholder-zinc-500 outline-none transition-colors focus:border-zinc-600", id: "search", name: "q", placeholder: "Search documentation...", type: "text", customAttributes: ["autocomplete": "off"])

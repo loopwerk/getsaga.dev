@@ -62,7 +62,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Getting Started
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "getting-started") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "getting-started") {
       div(class: "grid items-center gap-12 md:grid-cols-2 max-sm:text-center") {
         div {
           h2(class: "mb-3 text-3xl font-bold tracking-tight") { "Up and running in seconds" }
@@ -89,7 +89,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Features
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "features") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "features") {
       div(class: "mb-12 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Built for developers who love Swift" }
         p { "Everything you need to build fast, type-safe static sites." }
@@ -119,7 +119,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Code Example
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "code") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "code") {
       div(class: "mb-10 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Everything is Swift, everything is typed" }
         p(class: "text-base") { "Define your entire pipeline in Swift. From a simple blog..." }
@@ -198,7 +198,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Growing Beyond
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "beyond") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "beyond") {
       div(class: "mb-12 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Grows with your site" }
         p(class: "text-base") { "From a simple blog to a complex multi-content site, Saga scales with you." }
@@ -221,7 +221,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Plugins
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "plugins") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "plugins") {
       div(class: "mb-12 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Modular by design" }
         p(class: "text-base") { "Compose your site with readers, renderers, and plugins that fit your needs." }
@@ -253,7 +253,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Ecosystem
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "ecosystem") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "ecosystem") {
       div(class: "mb-12 text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Tap into an ecosystem of Swift packages" }
         p { "Use these packages directly in your build pipeline for syntax highlighting, HTML transforms, and more." }
@@ -275,7 +275,7 @@ func renderHomePage(context: PageRenderingContext) -> Node {
     }
 
     // Requirements
-    section(class: "mx-auto max-w-5xl px-8 pb-24 sm:pb-32", id: "requirements") {
+    section(class: "mx-auto max-w-5xl px-6 pb-24 sm:pb-32", id: "requirements") {
       div(class: "text-center") {
         h2(class: "mb-2 text-3xl font-bold tracking-tight") { "Requirements" }
         p(class: "text-base mb-12") { "Saga requires Swift 6.0+ and runs on macOS 14+ and Linux." }
