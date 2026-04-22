@@ -30,7 +30,7 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         meta(content: "#18181a", name: "theme-color")
         link(href: "/static/site.webmanifest", rel: "manifest")
         if !Saga.isDev {
-          script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710"])
+          script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710", "data-performance": "true"])
         }
       }
 
