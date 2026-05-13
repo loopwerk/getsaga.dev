@@ -1,7 +1,7 @@
 # Multi-stage build for getsaga.dev static site
 
 # Stage 1: Build environment
-FROM swift:6.0-noble AS builder
+FROM swift:6.1-noble AS builder
 
 # Install system dependencies
 RUN apt-get update && apt-get --no-install-recommends install -y \
