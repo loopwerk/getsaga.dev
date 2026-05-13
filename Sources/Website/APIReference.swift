@@ -103,6 +103,7 @@ struct APIMetadata: Metadata {
   let declaration: String
   let isDeprecated: Bool
   let deprecationMessage: String?
+  let renamedTo: String?
   let members: [APIMember]
   let inheritsFrom: [Conformance]
   let inheritedBy: [Conformance]
@@ -118,6 +119,7 @@ struct APIMember: Codable {
   let docComment: String?
   let isDeprecated: Bool
   let deprecationMessage: String?
+  let renamedTo: String?
 }
 
 // MARK: - Symbol graph helpers
@@ -176,7 +178,7 @@ func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [AP
     guard symbol.accessLevel.rawValue == "public" else { return nil }
     guard let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier) else { return nil }
 
-    let (isDeprecated, deprecationMessage) = checkDeprecation(symbol: symbol)
+    let (isDeprecated, deprecationMessage, renamedTo) = checkDeprecation(symbol: symbol)
 
     return APIMember(
       name: symbol.names.title,
@@ -184,7 +186,8 @@ func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [AP
       declaration: Sigil.renderDeclaration(symbol: symbol),
       docComment: renderDocComment(symbol: symbol),
       isDeprecated: isDeprecated,
-      deprecationMessage: deprecationMessage
+      deprecationMessage: deprecationMessage,
+      renamedTo: renamedTo
     )
   }.sorted { a, b in
     if a.kind != b.kind { return a.kind.order < b.kind.order }
@@ -259,7 +262,7 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
 
     let declaration = Sigil.renderDeclaration(symbol: symbol)
     let docComment = renderDocComment(symbol: symbol)
-    let (isDeprecated, deprecationMessage) = checkDeprecation(symbol: symbol)
+    let (isDeprecated, deprecationMessage, renamedTo) = checkDeprecation(symbol: symbol)
     let members = resolveMembers(ids: membersByParent[id] ?? [], symbols: symbols)
     let inheritsFrom = (inheritanceBySymbol[id] ?? []).sorted { $0.name < $1.name }
     let inheritedBy = (inheritedBySymbol[id] ?? []).sorted { $0.name < $1.name }
@@ -274,6 +277,7 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
       declaration: declaration,
       isDeprecated: isDeprecated,
       deprecationMessage: deprecationMessage,
+      renamedTo: renamedTo,
       members: members,
       inheritsFrom: inheritsFrom,
       inheritedBy: inheritedBy,
@@ -360,6 +364,7 @@ func loadExtensionSymbolGraphs(rootPath: Path) throws -> [Item<APIMetadata>] {
       declaration: declaration,
       isDeprecated: false,
       deprecationMessage: nil,
+      renamedTo: nil,
       members: sortedMembers,
       inheritsFrom: [],
       inheritedBy: [],
@@ -401,19 +406,19 @@ func renderDocComment(symbol: SymbolGraph.Symbol) -> String? {
 
 // MARK: - Deprecation check
 
-func checkDeprecation(symbol: SymbolGraph.Symbol) -> (Bool, String?) {
+func checkDeprecation(symbol: SymbolGraph.Symbol) -> (Bool, String?, String?) {
   guard let availability = symbol.availability else {
-    return (false, nil)
+    return (false, nil, nil)
   }
 
   for item in availability {
     if item.isUnconditionallyDeprecated {
-      return (true, item.message)
+      return (true, item.message, item.renamed)
     }
     if item.deprecatedVersion != nil {
-      return (true, item.message)
+      return (true, item.message, item.renamed)
     }
   }
 
-  return (false, nil)
+  return (false, nil, nil)
 }

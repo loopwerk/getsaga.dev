@@ -70,6 +70,11 @@ func renderAPIPage(context: ItemRenderingContext<APIMetadata>) -> Node {
                 Node.raw(" ")
                 message
               }
+              if let renamed = meta.renamedTo {
+                Node.raw(" Renamed to ")
+                code { renamed }
+                "."
+              }
             }
           }
         }
@@ -137,21 +142,22 @@ func renderMemberGroups(_ members: [APIMember]) -> Node {
           div(class: "member-item member-\(kind.rawValue)", id: anchor) {
             Node.raw(#"<pre class="member-declaration\#(member.isDeprecated ? " line-through" : "")" data-pagefind-ignore><code class="language-swift">\#(member.declaration)</code></pre>"#)
             if member.isDeprecated {
-              if let message = member.deprecationMessage {
-                blockquote(class: "mt-4") {
-                  p {
-                    em { "Deprecated" }
+              blockquote(class: "mt-4") {
+                p {
+                  em { "Deprecated" }
+                  if let message = member.deprecationMessage {
                     Node.raw(" ")
                     message
                   }
-                }
-              } else {
-                blockquote(class: "mt-4") {
-                  p { em { "Deprecated" } }
+                  if let renamed = member.renamedTo {
+                    Node.raw(" Renamed to ")
+                    code { renamed }
+                    "."
+                  }
                 }
               }
             }
-            if let doc = member.docComment, member.deprecationMessage == nil {
+            if let doc = member.docComment, member.deprecationMessage == nil, member.renamedTo == nil {
               div(class: "member-doc") { Node.raw(doc) }
             }
           }
