@@ -34,7 +34,7 @@ try await saga
     itemProcessor: sequence(
       processDocItem,
       boldBlockquoteKeywords,
-      swiftSoupProcessor(processExternalLinks, renderToc, addCodeWordBreaks),
+      swiftSoupProcessor(processExternalLinks, renderToc, extractSummary, addCodeWordBreaks),
       syntaxHighlight
     ),
     sorting: docSorting,

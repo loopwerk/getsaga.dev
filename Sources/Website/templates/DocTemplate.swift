@@ -36,7 +36,7 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String, maxMajor: Int) ->
 // MARK: - Guides index
 
 func renderGuidesIndex(context: PageRenderingContext) -> Node {
-  let docs = context.allItems.compactMap { $0 as? Item<DocMetadata> }.filter { $0.url.contains("/guides/") }
+  let docs = context.allItems.compactMap { $0 as? Item<DocMetadata> }.sorted(by: docSorting)
   let guides = docs.filter { $0.url.contains("/guides/") }
   let maxMajor = context.allItems.compactMap { ($0 as? Item<ReleaseMetadata>)?.metadata.major }.max() ?? 3
 
@@ -45,10 +45,13 @@ func renderGuidesIndex(context: PageRenderingContext) -> Node {
       docSidebar(docs: docs, currentUrl: "/docs/guides/", maxMajor: maxMajor)
       main(class: "doc-content min-w-0") {
         h1 { "Guides" }
-        ul(class: "mt-8") {
+        ul(class: "mt-8 list-none flex flex-col gap-4 p-0") {
           guides.map { guide in
-            li {
-              a(href: guide.url) { guide.title }
+            li(class: "!mb-0") {
+              a(class: "font-semibold", href: guide.url) { guide.title }
+              if let summary = guide.metadata.summary {
+                p(class: "mt-1 text-zinc-400") { summary }
+              }
             }
           }
         }

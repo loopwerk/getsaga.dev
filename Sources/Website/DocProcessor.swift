@@ -1,3 +1,4 @@
+import Foundation
 import Moon
 import Saga
 import SagaPathKit
@@ -6,6 +7,7 @@ import SwiftSoup
 
 struct DocMetadata: Metadata {
   var toc: String?
+  var summary: String?
 }
 
 func processDocItem(item: Item<DocMetadata>) {
@@ -23,6 +25,14 @@ func syntaxHighlight<M>(item: Item<M>) {
 
 func renderToc(_ doc: Document, item: Item<DocMetadata>) throws {
   item.metadata.toc = try buildTOCList(doc)
+}
+
+/// Store the DocC abstract (the intro paragraph right below the title) as the item's summary,
+/// so index pages can show it alongside the title.
+func extractSummary(_ doc: Document, item: Item<DocMetadata>) throws {
+  guard let first = doc.body()?.children().array().first, first.tagName() == "p" else { return }
+  let text = try first.text().trimmingCharacters(in: .whitespacesAndNewlines)
+  item.metadata.summary = text.isEmpty ? nil : text
 }
 
 /// Insert `<wbr>` after each `:` inside inline `<code>` elements so long Swift-style
