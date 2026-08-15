@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaUtils",
       "state" : {
-        "revision" : "942f62107aa37bf5083102aea8f79f3a8936518c",
-        "version" : "1.5.0"
+        "revision" : "ec8eaf1f04c3112b5898d7196ac4272ab653a388",
+        "version" : "1.5.1"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "9f542610331815e29cc3821d3b6f488db8715517",
-        "version" : "1.6.0"
+        "revision" : "a9a5efd40eaf558a2bcd48d64b1d1646be686008",
+        "version" : "1.7.1"
       }
     },
     {
@@ -124,7 +124,7 @@
       "location" : "https://github.com/swiftlang/swift-docc-symbolkit",
       "state" : {
         "branch" : "main",
-        "revision" : "cf6249d437ae23fb46a1c735d0240edb23cc35a8"
+        "revision" : "c1f9484553d29afb981b95458b37c1c3d3e1bcd7"
       }
     },
     {
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "6c7915e16f729857aec3e99068c361e58a00ed68",
-        "version" : "2.13.4"
+        "revision" : "8d6ad267714cac3ae747cefdd21f7a6665006e1f",
+        "version" : "2.13.7"
       }
     },
     {
