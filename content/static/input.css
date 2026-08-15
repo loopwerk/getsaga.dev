@@ -49,7 +49,7 @@ body.home .background {
 }
 
 .sidebar-link {
-  @apply block text-sm text-zinc-400 px-3 py-1.5 rounded-md no-underline overflow-hidden text-ellipsis whitespace-nowrap transition-colors;
+  @apply block text-sm text-zinc-400 px-3 py-1.5 rounded-md no-underline leading-snug transition-colors;
 }
 
 .sidebar-link-active, .sidebar-link:hover {

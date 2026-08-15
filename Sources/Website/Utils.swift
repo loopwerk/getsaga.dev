@@ -17,7 +17,10 @@ let sagaVersion: String = {
   return version
 }()
 
-let docOrder = ["index", "Installation", "GettingStarted", "Deploying", "Architecture", "AdvancedUsage", "Migrate"]
+/// The order in which docs and guides are shown, parsed from the `## Topics` section of
+/// Saga.md (which is copied to content/docs/index.md). Anything not curated there sorts
+/// last, alphabetically by title. Populated by `rewriteMarkdownDocs`.
+nonisolated(unsafe) var docOrder = ["index"]
 
 /// Maps symbol names (e.g. "Writer") to the doc articles that mention them.
 nonisolated(unsafe) var symbolMentions: [String: [(title: String, url: String)]] = [:]
@@ -45,21 +48,35 @@ private struct CachedMention: Codable {
   let url: String
 }
 
+private struct DocCache: Codable {
+  let order: [String]
+  let mentions: [String: [CachedMention]]
+}
+
 func rewriteMarkdownDocs(inputPath: Path) throws {
   let docsPath = inputPath + "docs"
   let markerPath = docsPath + ".rewritten.json"
 
-  // If already rewritten in this dev session, load cached mentions and skip
+  // If already rewritten in this dev session, load the cached order and mentions and skip
   if markerPath.exists {
     let data: Data = try markerPath.read()
-    let cached = try JSONDecoder().decode([String: [CachedMention]].self, from: data)
-    for (symbol, mentions) in cached {
+    let cached = try JSONDecoder().decode(DocCache.self, from: data)
+    docOrder = cached.order
+    for (symbol, mentions) in cached.mentions {
       symbolMentions[symbol] = mentions.map { (title: $0.title, url: $0.url) }
     }
     return
   }
 
   let docs = try docsPath.recursiveChildren().filter { $0.extension == "md" }
+
+  // The order of docs and guides is curated in Saga.md's `## Topics` section, which lands
+  // here as index.md. Read it before the <doc:Filename> references get rewritten away.
+  let indexPath = docsPath + "index.md"
+  if indexPath.exists {
+    let indexMarkdown: String = try indexPath.read()
+    docOrder = ["index"] + extractDocOrder(markdown: indexMarkdown)
+  }
 
   // Build a mapping of filename (without extension) → (title, url)
   var docTitles: [String: String] = [:]
@@ -101,9 +118,12 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
     symbolMentions[symbol] = mentions.filter { seen.insert($0.url).inserted }
   }
 
-  // Cache mentions so subsequent dev rebuilds can skip rewriting
-  let cacheable = symbolMentions.mapValues { $0.map { CachedMention(title: $0.title, url: $0.url) } }
-  let data = try JSONEncoder().encode(cacheable)
+  // Cache the order and mentions so subsequent dev rebuilds can skip rewriting
+  let cache = DocCache(
+    order: docOrder,
+    mentions: symbolMentions.mapValues { $0.map { CachedMention(title: $0.title, url: $0.url) } }
+  )
+  let data = try JSONEncoder().encode(cache)
   try markerPath.write(data)
 }
 
@@ -222,6 +242,28 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String], docUrls: [St
   result = output.joined(separator: "\n")
 
   return result
+}
+
+/// Extracts the curated doc order from the `## Topics` section of DocC markdown: the
+/// filenames referenced via `<doc:Filename>`, in the order they appear.
+func extractDocOrder(markdown: String) -> [String] {
+  guard let topicsRange = markdown.range(of: "\n## Topics") else {
+    return []
+  }
+  let topics = String(markdown[topicsRange.upperBound...])
+
+  var order: [String] = []
+  var seen = Set<String>()
+  let regex = try! NSRegularExpression(pattern: "<doc:(\\w+)>")
+  for match in regex.matches(in: topics, range: NSRange(topics.startIndex..., in: topics)) {
+    if let range = Range(match.range(at: 1), in: topics) {
+      let filename = String(topics[range])
+      if seen.insert(filename).inserted {
+        order.append(filename)
+      }
+    }
+  }
+  return order
 }
 
 /// Extracts symbol names referenced via ``Symbol`` or ``Parent/member`` in DocC markdown.
