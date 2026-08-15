@@ -13,6 +13,12 @@ struct DocMetadata: Metadata {
 func processDocItem(item: Item<DocMetadata>) {
   // Replace titles like ``Saga`` with just Saga
   item.title = item.title.replacingOccurrences(of: "`", with: "")
+
+  // DocC requires the landing page to be titled after the module, but "Introduction"
+  // reads better as the first entry in the docs.
+  if item.filenameWithoutExtension == "index" {
+    item.title = "Introduction"
+  }
 }
 
 func boldBlockquoteKeywords<M>(item: Item<M>) {
