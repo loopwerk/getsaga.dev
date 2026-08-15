@@ -99,7 +99,9 @@ func rewriteMarkdownDocs(inputPath: Path) throws {
 
   for doc in docs {
     let markdown: String = try doc.read()
-    let rewritten = rewriteMarkdown(markdown: markdown, docTitles: docTitles, docUrls: docUrls)
+    // The `## Topics` section only exists to curate the order of the sidebar, which already
+    // lists every doc and guide, so there's no point in rendering it on the page as well.
+    let rewritten = rewriteMarkdown(markdown: stripTopicsSection(markdown: markdown), docTitles: docTitles, docUrls: docUrls)
     try doc.write(rewritten)
 
     // Collect symbol mentions for "Mentioned in" on API pages
@@ -264,6 +266,22 @@ func extractDocOrder(markdown: String) -> [String] {
     }
   }
   return order
+}
+
+/// Removes the `## Topics` section (up to the next `## ` heading, or the end of the file)
+/// from DocC markdown. Call `extractDocOrder` before this.
+func stripTopicsSection(markdown: String) -> String {
+  guard let topicsRange = markdown.range(of: "\n## Topics") else {
+    return markdown
+  }
+
+  let rest = markdown[topicsRange.upperBound...]
+  var remainder = ""
+  if let nextHeading = rest.range(of: "\n## ") {
+    remainder = String(rest[nextHeading.lowerBound...])
+  }
+
+  return String(markdown[markdown.startIndex ..< topicsRange.lowerBound]) + remainder
 }
 
 /// Extracts symbol names referenced via ``Symbol`` or ``Parent/member`` in DocC markdown.

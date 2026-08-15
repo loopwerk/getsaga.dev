@@ -10,7 +10,7 @@ func docSidebar(docs: [Item<DocMetadata>], currentUrl: String, maxMajor: Int) ->
   let guides = docs.filter { $0.url.contains("/guides/") }
 
   return aside(class: "doc-sidebar pb-6") {
-    h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2 pl-3") { "TOPICS" }
+    h4(class: "text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2 pl-3") { "ESSENTIALS" }
     ul(class: "list-none flex flex-col gap-1 p-0") {
       topics.map { doc in
         li {
