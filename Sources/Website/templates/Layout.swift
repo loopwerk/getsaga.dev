@@ -26,9 +26,12 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
         link(href: "/static/favicon.svg", rel: "icon", type: "image/svg+xml")
         link(href: "/static/favicon.ico", rel: "shortcut icon")
         link(href: "/static/apple-touch-icon.png", rel: "apple-touch-icon", sizes: "180x180")
+        link(href: "/static/site.webmanifest", rel: "manifest")
         meta(content: "Saga", name: "apple-mobile-web-app-title")
         meta(content: "#18181a", name: "theme-color")
-        link(href: "/static/site.webmanifest", rel: "manifest")
+        meta(content: "https://getsaga.dev/static/opengraph.png", customAttributes: ["property": "og:image"])
+        meta(content: "1200", customAttributes: ["property": "og:image:width"])
+        meta(content: "630", customAttributes: ["property": "og:image:height"])
         if !Saga.isDev {
           script(defer: true, src: "/script.js", customAttributes: ["data-website-id": "695938bd-cbf4-4702-9c0c-0e4e9a619710", "data-performance": "true"])
         }
