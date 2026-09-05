@@ -40,8 +40,8 @@ func renderAPIIndex(context: ItemsRenderingContext<APIMetadata>) -> Node {
       main(class: "doc-content min-w-0") {
         h1 { "Saga \(sagaVersion) API Reference" }
         p(class: "mt-8") { "Complete reference for all public types, protocols, and functions in the Saga module. Browse the symbols using the sidebar." }
-        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white! transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/releasenotes/") {
-          "Releases notes"
+        a(class: "inline-flex items-center gap-2 rounded-lg bg-accent px-7 py-3 text-sm font-semibold text-white! transition-all hover:-translate-y-px hover:bg-accent-hover hover:shadow-lg", href: "/docs/releasenotes/\(latestReleaseMajor(allItems: context.allItems)).x/") {
+          "Release notes"
         }
       }
     }

@@ -104,9 +104,12 @@ func layout(title pageTitle: String, activePage: Page, @NodeBuilder children: ()
   ]
 }
 
+func latestReleaseMajor(allItems: [AnyItem]) -> Int {
+  allItems.compactMap { $0 as? Item<ReleaseMetadata> }.sorted { $0.date > $1.date }.first?.metadata.major ?? 3
+}
+
 func renderReleaseNotesRedirect(context: PageRenderingContext) -> String {
-  let major = context.allItems.compactMap { $0 as? Item<ReleaseMetadata> }.sorted { $0.date > $1.date }.first?.metadata.major ?? 3
-  return Saga.redirectHTML(to: "/docs/releasenotes/\(major).x/")
+  return Saga.redirectHTML(to: "/docs/releasenotes/\(latestReleaseMajor(allItems: context.allItems)).x/")
 }
 
 func render404Page(context: PageRenderingContext) -> Node {
