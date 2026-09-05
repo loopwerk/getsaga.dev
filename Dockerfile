@@ -25,20 +25,28 @@ RUN pnpm install --frozen-lockfile
 # Copy Swift package files for dependency resolution
 COPY Package.swift Package.resolved justfile ./
 
-# Pre-fetch Swift dependencies (cached unless Package files change)
-RUN just resolve
+# Pre-fetch Swift dependencies (cached unless Package files change).
+# .build is a cache mount so SwiftPM's incremental state survives between
+# deploys. Unlike the other Saga sites, the binary isn't copied out of the
+# mount: the build step needs .build itself (the Saga checkout for
+# copy-docs/symbol-graph, and `swift run`), so the mount is repeated on
+# every Swift-touching step instead.
+RUN --mount=type=cache,target=/app/.build,sharing=locked \
+    just resolve
 
-# Copy source code and justfile for compilation
+# Copy source code for compilation
 COPY Sources ./Sources
 
 # Pre-build Swift binary (cached unless source or deps change)
-RUN just compile
+RUN --mount=type=cache,target=/app/.build,sharing=locked \
+    just compile
 
 # Copy all remaining files
 COPY . .
 
 # Build the site
-RUN --mount=type=cache,target=/root/.swifttailwind \
+RUN --mount=type=cache,target=/app/.build,sharing=locked \
+    --mount=type=cache,target=/root/.swifttailwind \
     just build
 
 # Stage 2: Nginx runtime
@@ -49,9 +57,3 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built static files from builder
 COPY --from=builder /app/deploy /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
