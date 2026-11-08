@@ -3,6 +3,7 @@ name: Update Saga dependency
 on:
   repository_dispatch:
     types: [saga-release]
+  workflow_dispatch:
 
 jobs:
   update:
