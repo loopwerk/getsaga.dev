@@ -18,6 +18,7 @@ jobs:
 
       - name: Commit and push
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet Package.resolved || (git add Package.resolved && git commit -m "Update Saga to latest version" && git push)
