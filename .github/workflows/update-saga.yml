@@ -7,15 +7,11 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    container: swift:6.4-resolute
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.0"
+        uses: actions/checkout@v7
 
       - name: Update Saga package
         run: swift package update Saga
