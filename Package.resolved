@@ -1,5 +1,5 @@
 {
-  "originHash" : "4d1bdb0ec6442bdc25abcabecb19972512667c1aca810362b15594c19075ba09",
+  "originHash" : "e601697874826901e5eb761d6b4571e28606c5150bdde360cae5870491b5c7ea",
   "pins" : [
     {
       "identity" : "bonsai",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/Moon",
       "state" : {
-        "revision" : "439d48259e278863203f5a6f67bb45c84ffbd360",
-        "version" : "1.3.0"
+        "revision" : "5c9be5a538dba8c5e70f7163eb340f269043fe54",
+        "version" : "1.3.1"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/Parsley",
       "state" : {
-        "revision" : "1384f65054372000ded7dbf1f4b4e27c8fac2198",
-        "version" : "1.2.0"
+        "revision" : "39cb0ae4f7b5ab00605c722eb38043be5616421e",
+        "version" : "1.2.2"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/Saga",
       "state" : {
-        "revision" : "32c27fcb6e677753bb033532fd5fe8944b17ee8c",
-        "version" : "3.11.0"
+        "revision" : "0dad828900211dee7c271335dc620dc75cd9c451",
+        "version" : "4.0.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaParsleyMarkdownReader",
       "state" : {
-        "revision" : "b44f4d89688eb4c2266d149b897e547598df0f97",
-        "version" : "1.3.0"
+        "revision" : "3dd5e4b2aedde683c2433c77f2032b22aba0e75d",
+        "version" : "1.5.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaSwimRenderer",
       "state" : {
-        "revision" : "05e68daf645d68cbb00658890a31083e9b1edb90",
-        "version" : "1.4.1"
+        "revision" : "79682767b62c17fd65673a6e026b1a4a103609f9",
+        "version" : "1.5.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/loopwerk/SagaUtils",
       "state" : {
-        "revision" : "ec8eaf1f04c3112b5898d7196ac4272ab653a388",
-        "version" : "1.5.1"
+        "revision" : "a640c0261be83e2ab29e37f9d272e5f954993602",
+        "version" : "1.7.0"
       }
     },
     {
@@ -88,7 +88,7 @@
       "location" : "https://github.com/loopwerk/Sigil",
       "state" : {
         "branch" : "main",
-        "revision" : "03d4215e7ad2d89b093183aa27be9c26bf2f06cd"
+        "revision" : "e3104426518ccea134aaeb8330a039a44a6e3e21"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "9f542610331815e29cc3821d3b6f488db8715517",
-        "version" : "1.6.0"
+        "revision" : "917b472dbe53ba699cbb0495f9a95a084bc6364d",
+        "version" : "1.7.4"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
-        "revision" : "924936d0427cb25a61169739a7660230bffa6ea6",
-        "version" : "0.8.0"
+        "revision" : "08ddb528923cc1a6527e02b7a1aee9e516ca749a",
+        "version" : "0.9.0"
       }
     },
     {
@@ -124,7 +124,7 @@
       "location" : "https://github.com/swiftlang/swift-docc-symbolkit",
       "state" : {
         "branch" : "main",
-        "revision" : "c1f9484553d29afb981b95458b37c1c3d3e1bcd7"
+        "revision" : "a3f3648bef3dd289e1f8756e77cf5610d2352f31"
       }
     },
     {
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "8d6ad267714cac3ae747cefdd21f7a6665006e1f",
-        "version" : "2.13.7"
+        "revision" : "8397a860c6955924b584c50c5265c6aac0970015",
+        "version" : "2.14.4"
       }
     },
     {

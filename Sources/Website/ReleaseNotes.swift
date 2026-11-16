@@ -1,10 +1,10 @@
 import Foundation
-#if canImport(FoundationNetworking)
-  import FoundationNetworking
-#endif
 import Parsley
 import Saga
 import SwiftSoup
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 
 struct ReleaseMetadata: Metadata {
   let tagName: String
@@ -33,9 +33,13 @@ func fetchReleases() async throws -> [Item<ReleaseMetadata>] {
 
     let (data, _) = try await URLSession.shared.data(for: request)
     let releases = try JSONDecoder().decode([GitHubRelease].self, from: data)
-    if releases.isEmpty { break }
+    if releases.isEmpty {
+      break
+    }
     allReleases.append(contentsOf: releases)
-    if releases.count < 100 { break }
+    if releases.count < 100 {
+      break
+    }
     page += 1
   }
 

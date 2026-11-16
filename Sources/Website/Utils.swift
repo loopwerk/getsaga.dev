@@ -157,22 +157,28 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String], docUrls: [St
     }
   }
 
-  // Rewrite <doc:Filename> → [Title](/docs/filename/)
-  let docPattern = "<doc:(\\w+)>"
+  // Rewrite <doc:Filename> → [Title](/docs/filename/), and links to a heading such as
+  // <doc:AdvancedUsage#Item-resources> → [Item resources](/docs/advancedusage/#item-resources).
+  // The anchor is slugified to match the heading anchors that SagaUtils generates.
+  let docPattern = "<doc:([\\w-]+)(?:#([\\w-]+))?>"
   let docRegex = try! NSRegularExpression(pattern: docPattern)
   for match in docRegex.matches(in: result, range: NSRange(result.startIndex..., in: result)).reversed() {
     if let nameRange = Range(match.range(at: 1), in: result),
        let fullRange = Range(match.range, in: result)
     {
       let filename = String(result[nameRange])
-      let title = docTitles[filename] ?? filename
       let url = docUrls[filename] ?? "/docs/\(filename.lowercased())/"
-      result.replaceSubrange(fullRange, with: "[\(title)](\(url))")
+      if let anchorRange = Range(match.range(at: 2), in: result) {
+        let anchor = String(result[anchorRange])
+        result.replaceSubrange(fullRange, with: "[\(anchor.replacingOccurrences(of: "-", with: " "))](\(url)#\(anchor.slugified))")
+      } else {
+        result.replaceSubrange(fullRange, with: "[\(docTitles[filename] ?? filename)](\(url))")
+      }
     }
   }
 
-  // Rewrite [text](doc:Filename) → [text](/docs/filename/)
-  let docLinkPattern = "\\](\\(doc:(\\w+)\\))"
+  // Rewrite [text](doc:Filename) → [text](/docs/filename/), keeping an optional #anchor
+  let docLinkPattern = "\\](\\(doc:([\\w-]+)(?:#([\\w-]+))?\\))"
   let docLinkRegex = try! NSRegularExpression(pattern: docLinkPattern)
   for match in docLinkRegex.matches(in: result, range: NSRange(result.startIndex..., in: result)).reversed() {
     if let outerRange = Range(match.range(at: 1), in: result),
@@ -180,7 +186,8 @@ func rewriteMarkdown(markdown: String, docTitles: [String: String], docUrls: [St
     {
       let filename = String(result[nameRange])
       let url = docUrls[filename] ?? "/docs/\(filename.lowercased())/"
-      result.replaceSubrange(outerRange, with: "(\(url))")
+      let anchor = Range(match.range(at: 3), in: result).map { "#" + String(result[$0]).slugified } ?? ""
+      result.replaceSubrange(outerRange, with: "(\(url)\(anchor))")
     }
   }
 
@@ -256,7 +263,7 @@ func extractDocOrder(markdown: String) -> [String] {
 
   var order: [String] = []
   var seen = Set<String>()
-  let regex = try! NSRegularExpression(pattern: "<doc:(\\w+)>")
+  let regex = try! NSRegularExpression(pattern: "<doc:([\\w-]+)>")
   for match in regex.matches(in: topics, range: NSRange(topics.startIndex..., in: topics)) {
     if let range = Range(match.range(at: 1), in: topics) {
       let filename = String(topics[range])

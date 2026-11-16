@@ -174,9 +174,7 @@ func collectInheritance(graph: SymbolGraph) -> [String: [Conformance]] {
 /// Converts member symbol IDs to sorted APIMember arrays.
 func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [APIMember] {
   ids.compactMap { memberID -> APIMember? in
-    guard let symbol = symbols[memberID] else { return nil }
-    guard symbol.accessLevel.rawValue == "public" else { return nil }
-    guard let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier) else { return nil }
+    guard let symbol = symbols[memberID], symbol.accessLevel.rawValue == "public", let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier) else { return nil }
 
     let (isDeprecated, deprecationMessage, renamedTo) = checkDeprecation(symbol: symbol)
 
@@ -190,7 +188,9 @@ func resolveMembers(ids: [String], symbols: [String: SymbolGraph.Symbol]) -> [AP
       renamedTo: renamedTo
     )
   }.sorted { a, b in
-    if a.kind != b.kind { return a.kind.order < b.kind.order }
+    if a.kind != b.kind {
+      return a.kind.order < b.kind.order
+    }
     return a.name < b.name
   }
 }
@@ -245,8 +245,7 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
   var items: [Item<APIMetadata>] = []
 
   for (id, symbol) in symbols {
-    guard symbol.accessLevel.rawValue == "public" else { continue }
-    guard let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier), kind.isTopLevel else { continue }
+    guard symbol.accessLevel.rawValue == "public", let kind = SymbolKind(rawValue: symbol.kind.identifier.identifier), kind.isTopLevel else { continue }
 
     // Skip symbols that are members of other types (but not members of the module itself)
     if memberTargets.contains(id) {
@@ -303,7 +302,9 @@ func loadSymbolGraph(rootPath: Path) throws -> [Item<APIMetadata>] {
   items.append(contentsOf: extensionItems)
 
   return items.sorted { a, b in
-    if a.metadata.kind != b.metadata.kind { return a.metadata.kind.order < b.metadata.kind.order }
+    if a.metadata.kind != b.metadata.kind {
+      return a.metadata.kind.order < b.metadata.kind.order
+    }
     return a.title < b.title
   }
 }
@@ -331,8 +332,7 @@ func loadExtensionSymbolGraphs(rootPath: Path) throws -> [Item<APIMetadata>] {
     let conformancesByBlock = collectConformances(graph: graph)
 
     for (id, symbol) in symbols {
-      guard symbol.accessLevel.rawValue == "public" else { continue }
-      guard SymbolKind(rawValue: symbol.kind.identifier.identifier) == .extension else { continue }
+      guard symbol.accessLevel.rawValue == "public", SymbolKind(rawValue: symbol.kind.identifier.identifier) == .extension else { continue }
 
       let typeName = symbol.names.title
       declarationsByType[typeName] = Sigil.renderDeclaration(symbol: symbol)
@@ -344,7 +344,9 @@ func loadExtensionSymbolGraphs(rootPath: Path) throws -> [Item<APIMetadata>] {
   // Create one Item per extended type
   return membersByType.map { typeName, members in
     let sortedMembers = members.sorted { a, b in
-      if a.kind != b.kind { return a.kind.order < b.kind.order }
+      if a.kind != b.kind {
+        return a.kind.order < b.kind.order
+      }
       return a.name < b.name
     }
 
